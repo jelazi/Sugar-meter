@@ -21,7 +21,6 @@ class TypeIngredientsListActivity : AppCompatActivity() {
     var floatingBtnAddTypeIngredient: FloatingActionButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("TAG", "on Create Type Ingredientslist aktivity")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_type_ingredients_list)
         searchView = findViewById(R.id.searchView) as SearchView

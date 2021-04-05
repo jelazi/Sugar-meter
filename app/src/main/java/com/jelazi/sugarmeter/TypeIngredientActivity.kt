@@ -37,8 +37,9 @@ class TypeIngredientActivity : AppCompatActivity() {
         actionbar!!.title = "Úprava suroviny"
         //set back button
         actionbar.setDisplayHomeAsUpEnabled(true)
-        if (intent.extras?.get("ingredient") != null)
-        typeIngredient = intent.extras?.get("ingredient") as TypeIngredient
+        if (intent.extras?.get("ingredient") != null) {
+            typeIngredient = intent.extras?.get("ingredient") as TypeIngredient
+        }
         this.initItems()
         reloadActivity()
     }
@@ -91,7 +92,11 @@ class TypeIngredientActivity : AppCompatActivity() {
                 LinearLayout.LayoutParams.MATCH_PARENT
         )
         input.layoutParams = lp
-        input.setText(name_ingredient.text)
+        if (name =="") {
+            input.setText("Surovina")
+        } else {
+            input.setText(name)
+        }
         input.setSelectAllOnFocus(true)
         input.requestFocus()
         builder.setView(input)

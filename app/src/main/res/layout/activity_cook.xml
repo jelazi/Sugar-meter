@@ -41,6 +41,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:layout_gravity="left|bottom"
+            app:backgroundTint="@color/purple_500"
             android:layout_margin="16dp"
             app:srcCompat="@android:drawable/ic_input_add" />
 
