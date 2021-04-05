@@ -21,8 +21,7 @@ class TypeIngredientActivity : AppCompatActivity() {
     var typeIngredient: TypeIngredient? = null
     var isChangeName = false
     var isChangeValue = false
-    var value = 0.0
-    var name = ""
+    var valueSugar : Double = 0.0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,6 +50,8 @@ class TypeIngredientActivity : AppCompatActivity() {
         if (typeIngredient != null) {
             name_ingredient.text = (typeIngredient?.name)
             value_ingredient.text = (typeIngredient?.valueSugar.toString())
+        } else {
+            typeIngredient = TypeIngredientsManager.getNewTypeIngredient("", 0.0)
         }
         initListeners()
     }
@@ -69,12 +70,12 @@ class TypeIngredientActivity : AppCompatActivity() {
 
 
     fun reloadActivity() {
-        if (value == 0.0) {
+        if (typeIngredient?.valueSugar == 0.0) {
             value_ingredient.setTextColor(this.getResources().getColor(color.gray))
         } else {
             value_ingredient.setTextColor(this.getResources().getColor(color.black))
         }
-        if (name.isEmpty()) {
+        if (typeIngredient?.name == "") {
             name_ingredient.setTextColor(this.getResources().getColor(color.gray))
         } else {
             name_ingredient.setTextColor(this.getResources().getColor(color.black))
@@ -82,7 +83,6 @@ class TypeIngredientActivity : AppCompatActivity() {
     }
 
     fun changeName() {
-
         val builder = AlertDialog.Builder(this@TypeIngredientActivity)
         builder.setTitle("Změna jména")
         builder.setMessage("Uložit toto jméno?")
@@ -92,10 +92,10 @@ class TypeIngredientActivity : AppCompatActivity() {
                 LinearLayout.LayoutParams.MATCH_PARENT
         )
         input.layoutParams = lp
-        if (name =="") {
+        if (typeIngredient?.name =="") {
             input.setText("Surovina")
         } else {
-            input.setText(name)
+            input.setText(typeIngredient?.name)
         }
         input.setSelectAllOnFocus(true)
         input.requestFocus()
@@ -105,7 +105,7 @@ class TypeIngredientActivity : AppCompatActivity() {
             val newName = input.text.toString()
                 if (!TypeIngredientsManager.isSameName(newName)) {
                     name_ingredient.setText(input.text)
-                    name = input.text.toString()
+                    typeIngredient?.name = input.text.toString()
                     isChangeName = true
                     reloadActivity()
                 } else {
@@ -115,7 +115,6 @@ class TypeIngredientActivity : AppCompatActivity() {
 
         builder.setNeutralButton("Zrušit"){ _, _ ->
         }
-
         val dialog: AlertDialog = builder.create()
         dialog.show()
         dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
@@ -134,6 +133,7 @@ class TypeIngredientActivity : AppCompatActivity() {
         )
         input.layoutParams = lp
         var text:String = value_ingredient.text.toString()
+
         text = text.replace(" g/100g", "")
         input.setText(text)
         input.setSelectAllOnFocus(true)
@@ -142,8 +142,9 @@ class TypeIngredientActivity : AppCompatActivity() {
 
         builder.setPositiveButton("ANO"){ dialog, which ->
             isChangeValue = true
+            valueSugar = input.text.toString().toDouble()
+            typeIngredient?.valueSugar = input.text.toString().toDouble()
             value_ingredient.setText(input.text.toString() + " g/100g")
-            value = input.text.toString().toDouble()
             reloadActivity()
 
         }
@@ -168,28 +169,24 @@ class TypeIngredientActivity : AppCompatActivity() {
 
         if (isChangeName) {
             typeIngredient?.name = name_ingredient.text.toString()
-                typeIngredient!!.name?.let {
-                    typeIngredient!!.id?.let { it1 ->
-                        TypeIngredientsManager.changeNameTypeIngredient(
-                                it1,
-                                it
-                        )
-                    }
-                }
         }
         if (isChangeValue) {
-            typeIngredient?.valueSugar = value_ingredient.text.toString().toDouble()
-            typeIngredient!!.valueSugar?.let {
-                typeIngredient!!.id?.let { it1 ->
-                    TypeIngredientsManager.changeValueTypeIngredient(
-                            it1,
-                            it
-                    )
-                }
-            }
+            typeIngredient?.valueSugar = valueSugar
         }
+        if (typeIngredient != null && typeIngredient?.isCorrect() == true) {
+            TypeIngredientsManager.addIngredient(typeIngredient)
+            TypeIngredientsManager.setListTypeIngredientsToPreferences(this)
+        }
+
+
         val resultIntent = Intent()
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
+    }
+
+    companion object {
+        @JvmField
+        val name = ""
+        val value = 0.0
     }
 }

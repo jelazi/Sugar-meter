@@ -3,7 +3,6 @@ package com.jelazi.sugarmeter
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Button
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +28,9 @@ class MainActivity : AppCompatActivity() {
         val actionbar = supportActionBar
         //set actionbar title
         actionbar!!.title = "Měřič cukru"
-
+        loadData()
+    }
+    private fun loadData() {
+        TypeIngredientsManager.getListTypeIngredientsFromPreferences(this)
     }
 }

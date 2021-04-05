@@ -20,4 +20,6 @@ class Ingredient (typeIngredient: TypeIngredient) {
         return true
     }
 
+
+
 }

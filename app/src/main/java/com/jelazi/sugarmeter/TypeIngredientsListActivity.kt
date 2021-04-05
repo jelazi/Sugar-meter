@@ -19,6 +19,8 @@ class TypeIngredientsListActivity : AppCompatActivity() {
     var info = ArrayList<HashMap<String, String>>()
     var typeIngredientListAdapter: TypeIngredientListAdapter? = null
     var floatingBtnAddTypeIngredient: FloatingActionButton? = null
+    private val NEW_INGREDIENT = 1
+    private val EDIT_INGREDIENT = 2
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,13 +66,41 @@ class TypeIngredientsListActivity : AppCompatActivity() {
         })
     }
 
+    override fun onResume() {
+        super.onResume()
+        createHashMap()
+        typeIngredientListAdapter = TypeIngredientListAdapter(this, info)
+        listview?.setAdapter(typeIngredientListAdapter)
+    }
+/*
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        Log.d("TAG", "here")
+        if (requestCode == NEW_INGREDIENT && resultCode == RESULT_OK) {
+            val name = data?.getStringExtra(TypeIngredientActivity.name)
+            val value = data?.getStringExtra(TypeIngredientActivity.value.toString())
+            Log.d("TAG", name.toString())
+            name?.let {
+                value?.let { it1 ->
+                    var typeIngr = TypeIngredientsManager.getNewTypeIngredient(
+                            it1,
+                            it.toDouble()
+                    )
+                    TypeIngredientsManager.setListTypeIngredientsToPreferences(this)
+                }
+            }
+
+
+        }
+    }*/
+
     private fun createHashMap () {
         var hashMap: HashMap<String, String> = HashMap<String, String>()
         info = ArrayList<HashMap<String, String>>()
-        for (i in 0..TypeIngredientsManager.typeIngredients.size - 1) {
+        for (i in 0..TypeIngredientsManager.listTypeIngredients.size - 1) {
             hashMap = HashMap()
-            TypeIngredientsManager.typeIngredients[i].name?.let { hashMap.put("name", it) }
-            TypeIngredientsManager.typeIngredients[i].valueSugar?.let { hashMap.put("value", it.toString()) }
+            TypeIngredientsManager.listTypeIngredients[i].name?.let { hashMap.put("name", it) }
+            TypeIngredientsManager.listTypeIngredients[i].valueSugar?.let { hashMap.put("value", it.toString()) }
             info.add(hashMap)
         }
     }

@@ -17,9 +17,24 @@ class TypeIngredient (id: Int, name: String, valueSugar: Double ){
         this.valueSugar = valueSugar
     }
 
-    public fun addPathPicture(pathPicture: String) {
+    fun addPathPicture(pathPicture: String) {
         this.pathPicture = pathPicture
     }
+
+    fun controlCorrect() {
+        if (name==null) name = ""
+        if (id == null) id = TypeIngredientsManager.getLastUsableId()
+        if (valueSugar == null) valueSugar = 0.0
+        if (pathPicture == null) pathPicture = ""
+    }
+
+    fun isCorrect():Boolean {
+        if (name== null || name?.let { it.isEmpty() } == true) return false
+        if (id == null || id?.let { it < 1} == true) return false
+        if (valueSugar == null || valueSugar?.let { it < 0} == true) return false
+        return true
+    }
+
 
 
 }
