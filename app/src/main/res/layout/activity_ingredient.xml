@@ -32,11 +32,7 @@
                 android:textSize="40sp"
                 android:text="Value of Ingredient" />
 
-            <ImageView
-                android:id="@+id/image_ingredient"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                 />
+
 
 
             <Button

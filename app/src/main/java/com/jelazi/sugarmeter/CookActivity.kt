@@ -13,7 +13,6 @@ class CookActivity : AppCompatActivity() {
     var food : Food? = null
     var nameFood : String? = ""
     var listView: ListView? = null
-    var addIngredientBtn: Button? = null
     var addIngredientFloatBtn: FloatingActionButton? = null
     var textViewName: TextView? = null
 
@@ -22,7 +21,6 @@ class CookActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_cook)
         listView = findViewById(R.id.listViewIngredient) as ListView
-        addIngredientBtn = findViewById(R.id.btn_add_ingredient)
         addIngredientFloatBtn = findViewById(R.id.floatingActionButtonAddIngredient)
         textViewName = findViewById(R.id.name_food_text_view)
         nameFood = "Jídlo 1"
@@ -35,10 +33,6 @@ class CookActivity : AppCompatActivity() {
             changeName()
         }
         addIngredientFloatBtn?.setOnClickListener {
-            addIngredient()
-        }
-
-        addIngredientBtn?.setOnClickListener {
             addIngredient()
         }
     }

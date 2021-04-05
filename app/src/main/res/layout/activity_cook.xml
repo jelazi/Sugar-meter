@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".CookActivity">
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -24,24 +28,22 @@
         <ListView
             android:id="@+id/listViewIngredient"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:longClickable="true">
         </ListView>
 
-        <Button
-            android:id="@+id/btn_add_ingredient"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Add Ingredient" />
+
+    </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButtonAddIngredient"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:clickable="true"
-            android:layout_gravity="end|bottom"
+            android:layout_gravity="left|bottom"
+            android:layout_margin="16dp"
             app:srcCompat="@android:drawable/ic_input_add" />
 
-    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
