@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
@@ -20,6 +21,7 @@ class TypeIngredientsListActivity : AppCompatActivity() {
     var floatingBtnAddTypeIngredient: FloatingActionButton? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("TAG", "on Create Type Ingredientslist aktivity")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_type_ingredients_list)
         searchView = findViewById(R.id.searchView) as SearchView
@@ -75,7 +77,10 @@ class TypeIngredientsListActivity : AppCompatActivity() {
     }
 
     private fun addTypeIngredient() {
+
         val intent = Intent(this, TypeIngredientActivity::class.java)
+        Log.d("TAG", "addTypeIngredient")
         startActivity(intent)
+
     }
 }

@@ -6,9 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".TypeIngredientActivity">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,10 +25,10 @@
                 android:id="@+id/value_ingredient"
                 android:layout_width="match_parent"
                 android:layout_height="60sp"
-                android:digits="0123456789"
+                android:inputType="number"
                 android:textAlignment="center"
                 android:textSize="40sp"
-                android:text="Value of Ingredient" />
+                android:text="0.0 g/100g" />
 
 
 
@@ -42,8 +40,6 @@
                 android:text="Save Ingredient" />
 
         </LinearLayout>
-
-    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

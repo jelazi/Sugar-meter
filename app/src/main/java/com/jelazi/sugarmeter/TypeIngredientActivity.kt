@@ -1,24 +1,32 @@
 package com.jelazi.sugarmeter
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Color
+import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.WindowManager
 import android.widget.*
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
+import com.jelazi.sugarmeter.R.color
 import kotlinx.android.synthetic.main.activity_ingredient.*
 
 
+@Suppress("DEPRECATION")
 class TypeIngredientActivity : AppCompatActivity() {
     var typeIngredient: TypeIngredient? = null
     var isChangeName = false
     var isChangeValue = false
+    var value = 0.0
+    var name = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ingredient)
 
@@ -29,8 +37,10 @@ class TypeIngredientActivity : AppCompatActivity() {
         actionbar!!.title = "Úprava suroviny"
         //set back button
         actionbar.setDisplayHomeAsUpEnabled(true)
+        if (intent.extras?.get("ingredient") != null)
         typeIngredient = intent.extras?.get("ingredient") as TypeIngredient
         this.initItems()
+        reloadActivity()
     }
 
 
@@ -56,6 +66,20 @@ class TypeIngredientActivity : AppCompatActivity() {
         }
     }
 
+
+    fun reloadActivity() {
+        if (value == 0.0) {
+            value_ingredient.setTextColor(this.getResources().getColor(color.gray))
+        } else {
+            value_ingredient.setTextColor(this.getResources().getColor(color.black))
+        }
+        if (name.isEmpty()) {
+            name_ingredient.setTextColor(this.getResources().getColor(color.gray))
+        } else {
+            name_ingredient.setTextColor(this.getResources().getColor(color.black))
+        }
+    }
+
     fun changeName() {
 
         val builder = AlertDialog.Builder(this@TypeIngredientActivity)
@@ -63,27 +87,28 @@ class TypeIngredientActivity : AppCompatActivity() {
         builder.setMessage("Uložit toto jméno?")
         val input = EditText(this@TypeIngredientActivity)
         val lp = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
         )
         input.layoutParams = lp
         input.setText(name_ingredient.text)
+        input.setSelectAllOnFocus(true)
         input.requestFocus()
         builder.setView(input)
 
-        builder.setPositiveButton("ANO"){dialog, which ->
+        builder.setPositiveButton("ANO"){ dialog, which ->
             val newName = input.text.toString()
-            if (!typeIngredient!!.name.equals(newName)) {
                 if (!TypeIngredientsManager.isSameName(newName)) {
                     name_ingredient.setText(input.text)
+                    name = input.text.toString()
                     isChangeName = true
+                    reloadActivity()
                 } else {
                     Toast.makeText(this@TypeIngredientActivity, "Jméno se již používá v jiné položce.", Toast.LENGTH_SHORT).show()
                 }
-            }
         }
 
-        builder.setNeutralButton("Zrušit"){_,_ ->
+        builder.setNeutralButton("Zrušit"){ _, _ ->
         }
 
         val dialog: AlertDialog = builder.create()
@@ -91,26 +116,34 @@ class TypeIngredientActivity : AppCompatActivity() {
         dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     }
 
+
     fun changeValue() {
         val builder = AlertDialog.Builder(this@TypeIngredientActivity)
         builder.setTitle("Změna obsah cukru v 100 g")
         builder.setMessage("Uložit tento obsah cukru?")
         val input = EditText(this@TypeIngredientActivity)
-        input.inputType = InputType.TYPE_CLASS_NUMBER
+        input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         val lp = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
         )
         input.layoutParams = lp
-        input.setText(value_ingredient.text)
+        var text:String = value_ingredient.text.toString()
+        text = text.replace(" g/100g", "")
+        input.setText(text)
+        input.setSelectAllOnFocus(true)
         input.requestFocus()
         builder.setView(input)
 
-        builder.setPositiveButton("ANO"){dialog, which ->
+        builder.setPositiveButton("ANO"){ dialog, which ->
             isChangeValue = true
+            value_ingredient.setText(input.text.toString() + " g/100g")
+            value = input.text.toString().toDouble()
+            reloadActivity()
+
         }
 
-        builder.setNeutralButton("Zrušit"){_,_ ->
+        builder.setNeutralButton("Zrušit"){ _, _ ->
         }
         val dialog: AlertDialog = builder.create()
         dialog.show()
@@ -133,8 +166,8 @@ class TypeIngredientActivity : AppCompatActivity() {
                 typeIngredient!!.name?.let {
                     typeIngredient!!.id?.let { it1 ->
                         TypeIngredientsManager.changeNameTypeIngredient(
-                            it1,
-                            it
+                                it1,
+                                it
                         )
                     }
                 }
@@ -144,8 +177,8 @@ class TypeIngredientActivity : AppCompatActivity() {
             typeIngredient!!.valueSugar?.let {
                 typeIngredient!!.id?.let { it1 ->
                     TypeIngredientsManager.changeValueTypeIngredient(
-                        it1,
-                        it
+                            it1,
+                            it
                     )
                 }
             }
