@@ -32,4 +32,18 @@ class Food (name: String){
         }
         return false
     }
+
+    fun isCorrect():Boolean {
+        if (name.isNullOrEmpty()) return false
+        if (listIngredients.isEmpty()) return false
+        for (ingredient in listIngredients) {
+            if (!ingredient.isCorrect()) return false
+        }
+        return true
+    }
+
+    fun controlCorrect() {
+        if (name.isNullOrEmpty()) name = "name"
+
+    }
 }

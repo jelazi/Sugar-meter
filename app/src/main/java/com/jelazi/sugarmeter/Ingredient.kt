@@ -2,7 +2,7 @@ package com.jelazi.sugarmeter
 
 class Ingredient (typeIngredient: TypeIngredient) {
     var typeIngredient: TypeIngredient? = null
-    var weight: Double? = 0.0
+    var weight: Double = 0.0
     private set
     var name: String? = null
     private set
@@ -17,6 +17,13 @@ class Ingredient (typeIngredient: TypeIngredient) {
     fun changeWeight (newWeight: Double) : Boolean{
         if (newWeight < 0.0) return false
         weight = newWeight
+        return true
+    }
+
+    fun isCorrect():Boolean {
+        if (typeIngredient == null || typeIngredient.let {isCorrect()}) return false
+        if (weight <= 0.0) return false
+        if (name.isNullOrEmpty()) return false
         return true
     }
 

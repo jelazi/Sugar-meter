@@ -24,7 +24,6 @@ object TypeIngredientsManager {
 
         val preference = PreferenceManager.getDefaultSharedPreferences(activity)
         val listIngredientsString: String? = preference.getString(PREF_INGREDIENTS_LIST, "")
-        Log.d("TAG", listIngredientsString.toString())
         if (listIngredientsString?.let { it.isEmpty() } == true) return false
         listIngredientsString?.let {listTypeIngredients = JsonParser.jsonToListTypeIngredients(it)}
         return true

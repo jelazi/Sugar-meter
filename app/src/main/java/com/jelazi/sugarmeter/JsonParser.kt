@@ -20,4 +20,20 @@ object JsonParser {
         }
         return jsonObject
     }
+
+    fun listFoodsToJson ():String {
+        val gsonPretty = GsonBuilder().setPrettyPrinting().create()
+        val jsonListBookPretty: String = gsonPretty.toJson(FoodManager.foodsList)
+        return jsonListBookPretty
+    }
+
+    fun jsonToListFoods (json: String):ArrayList<Food> {
+        val gson = Gson()
+        val itemType = object : TypeToken<ArrayList<Food>>() {}.type
+        val jsonObject = gson.fromJson<ArrayList<Food>>(json, itemType)
+        for (food in jsonObject) {
+            food.controlCorrect()
+        }
+        return jsonObject
+    }
 }

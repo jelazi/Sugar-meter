@@ -4,10 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="60sp"
     android:gravity="center_vertical"
-    android:id="@+id/part_day_item"
-    android:weightSum="12"
-    >
-
+    android:id="@+id/part_ingredient_item"
+    android:weightSum="12">
 
     <ImageView
         android:id="@+id/ingredient_picture_part"
@@ -24,10 +22,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="5"
-
         android:gravity="center"
         android:textSize="20sp"
         android:text="Surovina" />
+
     <View
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -39,7 +37,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-
         android:gravity="center"
         android:textSize="15sp"
         android:text="---" />
