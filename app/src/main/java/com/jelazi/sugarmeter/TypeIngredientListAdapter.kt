@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
+import com.avatarfirst.avatargenlib.AvatarConstants
+import com.avatarfirst.avatargenlib.AvatarGenerator
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -40,6 +42,13 @@ class TypeIngredientListAdapter(context: Context, arrayList: ArrayList<HashMap<S
 
         holder.name!!.setText(map.get("name"))
         holder.value!!.setText(map.get("value"))
+        holder.image!!.setImageDrawable(
+                AvatarGenerator.avatarImage(
+                        context,
+                        100,
+                        AvatarConstants.CIRCLE,
+                        map.get("name").toString()
+                ))
        // holder.image!!.setImageResource(map.get("lastDate"))
 
         return myview
