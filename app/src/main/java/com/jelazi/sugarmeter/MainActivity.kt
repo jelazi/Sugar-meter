@@ -67,6 +67,8 @@ class MainActivity : AppCompatActivity() {
                 startCookActivity(name.toString())
             }
         })
+
+      //  TypeIngredientsManager.clearIngredients()
     }
 
     private fun startCookActivity(name: String) {
@@ -75,6 +77,7 @@ class MainActivity : AppCompatActivity() {
     }
     private fun loadData() {
         TypeIngredientsManager.getListTypeIngredientsFromPreferences(this)
+
         FoodManager.getListFoodsFromPreferences(this)
     }
 

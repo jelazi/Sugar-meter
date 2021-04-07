@@ -28,9 +28,16 @@
         <ListView
             android:id="@+id/listViewIngredient"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:longClickable="true">
         </ListView>
+
+        <TextView
+            android:id="@+id/sum_suggar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:text="Sum" />
 
 
     </LinearLayout>

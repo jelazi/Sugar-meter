@@ -26,7 +26,7 @@ class FoodListAdapter (context: Context, arrayList: ArrayList<HashMap<String, St
         if (convertView == null) {
             val mInflater = (context as Activity).layoutInflater
 
-            myview = mInflater!!.inflate(R.layout.type_food_item, parent, false)
+            myview = mInflater!!.inflate(R.layout.food_item, parent, false)
 
             holder = ViewHolder()
             holder.name = myview!!.findViewById<TextView>(R.id.food_name_part) as TextView

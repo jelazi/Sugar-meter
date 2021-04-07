@@ -2,6 +2,7 @@ package com.jelazi.sugarmeter
 
 import android.app.Activity
 import android.util.Log
+import androidx.lifecycle.ViewModelProvider
 import androidx.preference.PreferenceManager
 
 
@@ -40,7 +41,6 @@ object TypeIngredientsManager {
 
     fun getNewTypeIngredient(name:String, valueSugar: Double):TypeIngredient {
         var newIngr: TypeIngredient = TypeIngredient(getLastUsableId(), name, valueSugar)
-        listTypeIngredients.add(newIngr)
         return newIngr;
     }
 
@@ -96,6 +96,15 @@ object TypeIngredientsManager {
         return null
     }
 
+    fun getTypeIngredientById (id: Int): TypeIngredient? {
+        for (typeIngredient in listTypeIngredients) {
+            if (typeIngredient in listTypeIngredients) {
+                return typeIngredient
+            }
+        }
+        return null
+    }
+
 
     fun getLastUsableId() : Int {
         if (listTypeIngredients.isEmpty()) return 1
@@ -121,6 +130,19 @@ object TypeIngredientsManager {
         return false
     }
 
+    fun clearIngredients():Boolean {
+        if (listTypeIngredients.isEmpty()) return false
+        listTypeIngredients.clear()
+        return true
+    }
+
+    fun changeIngredient(id: Int, newName: String, newValue: Double): Boolean {
+        var oldIngredient = getTypeIngredientById(id)
+        if (oldIngredient == null) return false
+        if (oldIngredient.name != newName) oldIngredient.name = newName
+        if (oldIngredient.valueSugar != newValue) oldIngredient.valueSugar = newValue
+        return true
+    }
 
 
 

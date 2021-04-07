@@ -19,9 +19,11 @@ import kotlinx.android.synthetic.main.activity_ingredient.*
 @Suppress("DEPRECATION")
 class TypeIngredientActivity : AppCompatActivity() {
     var typeIngredient: TypeIngredient? = null
+    var typeIntent = ""
     var isChangeName = false
     var isChangeValue = false
     var valueSugar : Double = 0.0
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,9 +38,16 @@ class TypeIngredientActivity : AppCompatActivity() {
         actionbar!!.title = "Úprava suroviny"
         //set back button
         actionbar.setDisplayHomeAsUpEnabled(true)
-        if (intent.extras?.get("ingredient") != null) {
-            typeIngredient = intent.extras?.get("ingredient") as TypeIngredient
+        if (intent.extras?.get("typeIntent") != null) {
+            typeIntent = intent.getStringExtra("typeIntent").toString()
+            if (typeIntent == "edit") {
+                if (intent.extras?.get("typeIngredient") != null) {
+                    var idIngredient = intent.getStringExtra("typeIngredient").toString().toInt()
+                    typeIngredient = TypeIngredientsManager.getTypeIngredientById(idIngredient)
+                }
+            }
         }
+
         this.initItems()
         reloadActivity()
     }
@@ -49,7 +58,7 @@ class TypeIngredientActivity : AppCompatActivity() {
 
         if (typeIngredient != null) {
             name_ingredient.text = (typeIngredient?.name)
-            value_ingredient.text = (typeIngredient?.valueSugar.toString())
+            value_ingredient.text = (typeIngredient?.valueSugar.toString() + " g/100g")
         } else {
             typeIngredient = TypeIngredientsManager.getNewTypeIngredient("", 0.0)
         }
@@ -104,8 +113,8 @@ class TypeIngredientActivity : AppCompatActivity() {
         builder.setPositiveButton("ANO"){ dialog, which ->
             val newName = input.text.toString()
                 if (!TypeIngredientsManager.isSameName(newName)) {
-                    name_ingredient.setText(input.text)
-                    typeIngredient?.name = input.text.toString()
+                    typeIngredient?.name = newName
+                    name_ingredient.setText(newName)
                     isChangeName = true
                     reloadActivity()
                 } else {
@@ -157,12 +166,12 @@ class TypeIngredientActivity : AppCompatActivity() {
     }
 
     fun saveIngredient () {
-        if (name_ingredient.text.isEmpty()) {
+        if (typeIngredient?.name.isNullOrEmpty()) {
             Toast.makeText(this@TypeIngredientActivity, "Pole jméno nesmí být prázdné.", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if (value_ingredient.text.isEmpty()) {
+        if (typeIngredient?.valueSugar == null || typeIngredient?.valueSugar == 0.0) {
             Toast.makeText(this@TypeIngredientActivity, "Pole hodnota cukru nesmí být prázdná.", Toast.LENGTH_SHORT).show()
             return
         }
@@ -173,20 +182,16 @@ class TypeIngredientActivity : AppCompatActivity() {
         if (isChangeValue) {
             typeIngredient?.valueSugar = valueSugar
         }
-        if (typeIngredient != null && typeIngredient?.isCorrect() == true) {
-            TypeIngredientsManager.addIngredient(typeIngredient)
-            TypeIngredientsManager.setListTypeIngredientsToPreferences(this)
-        }
-
-
         val resultIntent = Intent()
+        if (typeIngredient != null && typeIngredient?.isCorrect() == true) {
+        if (typeIntent == "edit" && typeIngredient != null ) {
+            typeIngredient?.id?.let { typeIngredient?.name?.let { it1 -> TypeIngredientsManager.changeIngredient(it, it1, typeIngredient?.valueSugar!!) } }
+        } else {
+                TypeIngredientsManager.addIngredient(typeIngredient)
+            }
+        }
+        TypeIngredientsManager.setListTypeIngredientsToPreferences(this)
         setResult(Activity.RESULT_OK, resultIntent)
         finish()
-    }
-
-    companion object {
-        @JvmField
-        val name = ""
-        val value = 0.0
     }
 }
