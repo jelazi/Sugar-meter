@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.avatarfirst.avatargenlib.AvatarConstants
 import com.avatarfirst.avatargenlib.AvatarGenerator
+import org.w3c.dom.Text
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -32,6 +33,7 @@ class FoodListAdapter (context: Context, arrayList: ArrayList<HashMap<String, St
             holder.name = myview!!.findViewById(R.id.food_name_part) as TextView
             holder.weight = myview!!.findViewById(R.id.food_weight_part) as TextView
             holder.image = myview!!.findViewById(R.id.food_picture_part) as ImageView
+            holder.sugar = myview!!.findViewById(R.id.food_sugar_part) as TextView
 
             myview.setTag(holder)
         } else {
@@ -42,6 +44,7 @@ class FoodListAdapter (context: Context, arrayList: ArrayList<HashMap<String, St
 
         holder.name!!.setText(map.get("name"))
         holder.weight!!.setText(map.get("weight"))
+        holder.sugar!!.setText(map.get("valueSugar"))
         holder.image!!.setImageDrawable(
             AvatarGenerator.avatarImage(
                 context,
@@ -70,6 +73,7 @@ class FoodListAdapter (context: Context, arrayList: ArrayList<HashMap<String, St
         var image: ImageView? = null
         var name: TextView? = null
         var weight: TextView? = null
+        var sugar: TextView? = null
     }
 
     fun filter(text: String?) {

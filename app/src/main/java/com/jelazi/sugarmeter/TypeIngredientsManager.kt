@@ -98,7 +98,7 @@ object TypeIngredientsManager {
 
     fun getTypeIngredientById (id: Int): TypeIngredient? {
         for (typeIngredient in listTypeIngredients) {
-            if (typeIngredient in listTypeIngredients) {
+            if (typeIngredient.id == id) {
                 return typeIngredient
             }
         }

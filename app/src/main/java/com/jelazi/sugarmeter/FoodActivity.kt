@@ -11,6 +11,8 @@ import android.view.WindowManager
 import android.widget.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_ingredient.*
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class FoodActivity : AppCompatActivity() {
     var food : Food? = null
@@ -28,6 +30,11 @@ class FoodActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food)
+
+        //actionbar
+        val actionbar = supportActionBar
+        //set actionbar title
+        actionbar!!.title = "Zadání jídla"
         listView = findViewById(R.id.listViewIngredient) as ListView
         sumTextView = findViewById(R.id.sum_suggar)
         addIngredientFloatBtn = findViewById(R.id.floatingActionButtonAddIngredient)
@@ -52,7 +59,7 @@ class FoodActivity : AppCompatActivity() {
         foodListAdapter = FoodListAdapter(this, info)
         listView?.adapter = (foodListAdapter)
         sumResult()
-        sumTextView?.setText("Celkem cukru: " + sum.toString() + "g")
+        sumTextView?.setText("Celkem cukru: " + sum.toString() + " g")
         sumTextView?.visibility = if (sum == 0.0){
             View.INVISIBLE
         } else{
@@ -78,6 +85,9 @@ class FoodActivity : AppCompatActivity() {
                 hashMap = HashMap()
                 food?.listIngredients!![i].name?.let { hashMap.put("name", it) }
                 food?.listIngredients!![i].weight?.let { hashMap.put("weight", it.toString()) }
+                var sugarWeight: Double = food?.listIngredients!![i].getWeightSugar()
+                var sugarWeghtRound: String = "%.2f".format(sugarWeight)
+                hashMap.put("valueSugar", sugarWeghtRound)
                 info.add(hashMap)
             }
         }

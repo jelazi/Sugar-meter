@@ -21,6 +21,11 @@ class Ingredient (typeIngredient: TypeIngredient, weight: Double) {
         return true
     }
 
+    fun getWeightSugar(): Double {
+        if (weight == 0.0 || typeIngredient?.valueSugar == 0.0) return 0.0
+        return typeIngredient?.valueSugar!! / 100 * weight
+    }
+
     fun isCorrect():Boolean {
         if (typeIngredient == null || typeIngredient.let {isCorrect()}) return false
         if (weight <= 0.0) return false
