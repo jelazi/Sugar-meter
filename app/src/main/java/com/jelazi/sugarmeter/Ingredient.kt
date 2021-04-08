@@ -1,6 +1,6 @@
 package com.jelazi.sugarmeter
 
-class Ingredient (typeIngredient: TypeIngredient) {
+class Ingredient (typeIngredient: TypeIngredient, weight: Double) {
     var typeIngredient: TypeIngredient? = null
     var weight: Double = 0.0
     private set
@@ -10,6 +10,7 @@ class Ingredient (typeIngredient: TypeIngredient) {
     init {
         this.typeIngredient = typeIngredient
         this.name = typeIngredient.name
+        this.weight = weight
     }
 
 

@@ -47,7 +47,6 @@ class TypeIngredientActivity : AppCompatActivity() {
                 }
             }
         }
-
         this.initItems()
         reloadActivity()
     }

@@ -29,8 +29,9 @@ class FoodListAdapter (context: Context, arrayList: ArrayList<HashMap<String, St
             myview = mInflater!!.inflate(R.layout.food_item, parent, false)
 
             holder = ViewHolder()
-            holder.name = myview!!.findViewById<TextView>(R.id.food_name_part) as TextView
-            holder.image = myview!!.findViewById<TextView>(R.id.food_picture_part) as ImageView
+            holder.name = myview!!.findViewById(R.id.food_name_part) as TextView
+            holder.weight = myview!!.findViewById(R.id.food_weight_part) as TextView
+            holder.image = myview!!.findViewById(R.id.food_picture_part) as ImageView
 
             myview.setTag(holder)
         } else {
@@ -40,6 +41,7 @@ class FoodListAdapter (context: Context, arrayList: ArrayList<HashMap<String, St
         val map = arrayList.get(position)
 
         holder.name!!.setText(map.get("name"))
+        holder.weight!!.setText(map.get("weight"))
         holder.image!!.setImageDrawable(
             AvatarGenerator.avatarImage(
                 context,
@@ -47,7 +49,6 @@ class FoodListAdapter (context: Context, arrayList: ArrayList<HashMap<String, St
                 AvatarConstants.CIRCLE,
                 map.get("name").toString()
             ))
-        // holder.image!!.setImageResource(map.get("lastDate"))
 
         return myview
     }
@@ -68,6 +69,7 @@ class FoodListAdapter (context: Context, arrayList: ArrayList<HashMap<String, St
 
         var image: ImageView? = null
         var name: TextView? = null
+        var weight: TextView? = null
     }
 
     fun filter(text: String?) {

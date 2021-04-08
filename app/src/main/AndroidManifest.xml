@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SugarMeter">
         <activity android:name=".TypeIngredientActivity"></activity>
-        <activity android:name=".CookActivity" />
+        <activity android:name=".FoodActivity" />
         <activity android:name=".TypeIngredientsListActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
