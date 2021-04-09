@@ -24,6 +24,8 @@ class FoodActivity : AppCompatActivity() {
     var btnPartFood: Button? = null
     var weightSugarPartFoodTextView: TextView? = null
     var headFoodLayout: LinearLayout? = null
+    var separator1: View? = null
+    var separator2: View? = null
 
     var info = ArrayList<HashMap<String, String>>()
     var listView: ListView? = null
@@ -50,10 +52,10 @@ class FoodActivity : AppCompatActivity() {
         sumWeightSugarTextView = findViewById(R.id.sum_suggar)
         addIngredientFloatBtn = findViewById(R.id.floatingActionButtonAddIngredient)
         btnPartFood = findViewById(R.id.btn_part_food)
-        btnPartFood?.setOnClickListener {
-            setWeightPartFood()
-        }
+
         weightSugarPartFoodTextView = findViewById(R.id.weight_sugar_part_food)
+        separator1 = findViewById(R.id.separator1)
+        separator2 = findViewById(R.id.separator2)
 
         textViewName = findViewById(R.id.name_food_text_view)
         if (nameFood.isEmpty()) {
@@ -94,6 +96,8 @@ class FoodActivity : AppCompatActivity() {
         sumWeightSugarTextView?.visibility = sumVisibility
         sumWeightFoodTextView?.visibility = sumVisibility
         btnPartFood?.visibility = sumVisibility
+        separator1?.visibility = sumVisibility
+        separator2?.visibility = sumVisibility
         weightSugarPartFoodTextView?.visibility = weightSugarPartVisibility
 
         if (nameFood.isEmpty()) {
@@ -146,6 +150,54 @@ class FoodActivity : AppCompatActivity() {
         addIngredientFloatBtn?.setOnClickListener {
             addIngredient()
         }
+        btnPartFood?.setOnClickListener {
+            setWeightPartFood()
+        }
+
+        listView?.setOnItemLongClickListener(object : AdapterView.OnItemLongClickListener {
+            override fun onItemLongClick(adapterView: AdapterView<*>, view: View, i: Int, l: Long): Boolean {
+                val ingredient = food?.getIngredientByName(info[i].get("name").toString())
+                if (ingredient != null)
+                    alertDialogChoiceActivity(ingredient)
+                return true
+            }
+        })
+    }
+    private fun alertDialogChoiceActivity(ingredient: Ingredient) {
+        val builder = AlertDialog.Builder(this@FoodActivity)
+        builder.setTitle("Výběr možnosti")
+        builder.setMessage("Co chcete s touto surovinou udělat?")
+
+        builder.setPositiveButton("Změnit množství"){ dialog, which ->
+            changeWeightIngredient(ingredient)
+        }
+
+        builder.setNeutralButton("Odstranit z jídla"){ dialog, which ->
+            deleteIngredientAlert(ingredient)
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+        dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+    }
+
+
+    private fun deleteIngredientAlert(ingredient: Ingredient) {
+        val builder2 = AlertDialog.Builder(this@FoodActivity)
+        builder2.setTitle("Odstranění suroviny z jídla")
+        builder2.setMessage("Opravdu chcete surovinu: " + ingredient.name + " vymazat?")
+
+        builder2.setPositiveButton("Ano"){ dialog2, which ->
+            food?.deleteIngredient(ingredient)
+            reloadActivity()
+        }
+
+        builder2.setNeutralButton("Ne"){ dialog2, which ->
+
+        }
+
+        val dialog2: AlertDialog = builder2.create()
+        dialog2.show()
+        dialog2.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     }
 
     private fun changeName (isFromAddIngredient: Boolean) {
@@ -191,6 +243,8 @@ class FoodActivity : AppCompatActivity() {
             return
         }
         val intent = Intent(this, TypeIngredientsListActivity::class.java)
+        var listId = food?.getUsableTypeIntents()
+        intent.putIntegerArrayListExtra("listId", listId)
         intent.putExtra("typeIntent", "choice")
         startActivityForResult(intent, CHOICE_INGREDIENT)
     }
@@ -208,6 +262,42 @@ class FoodActivity : AppCompatActivity() {
                 Toast.makeText(this@FoodActivity, "Pole jméno nesmí být prázdné.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    fun changeWeightIngredient(ingredient: Ingredient) {
+        val builder = AlertDialog.Builder(this@FoodActivity)
+        val nameTypeIngredient = ingredient.name
+        var weight = ingredient.weight
+        builder.setTitle("Změnit množství suroviny")
+        builder.setMessage("Zadejte množství suroviny: " + nameTypeIngredient)
+        val input = EditText(this@FoodActivity)
+        input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        val lp = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        input.layoutParams = lp
+
+        input.setText(weight.toString())
+        input.setSelectAllOnFocus(true)
+        input.requestFocus()
+        builder.setView(input)
+
+        builder.setPositiveButton("ANO"){ dialog, which ->
+            weight = input.text.toString().toDouble()
+            if (weight != 0.0) {
+                ingredient.changeWeight(weight)
+                reloadActivity()
+            } else {
+                Toast.makeText(this@FoodActivity, "Pole hodnota nesmí být nula.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        builder.setNeutralButton("Zrušit"){ _, _ ->
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+        dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     }
 
     fun addIngredientDialog(typeIngredient: TypeIngredient) {

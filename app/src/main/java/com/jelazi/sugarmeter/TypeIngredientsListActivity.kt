@@ -3,17 +3,16 @@ package com.jelazi.sugarmeter
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Build
 import android.os.Bundle
-import android.text.InputType
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_ingredient.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
+import java.util.function.Predicate
 
 class TypeIngredientsListActivity : AppCompatActivity() {
     var listview: ListView? = null
@@ -22,6 +21,10 @@ class TypeIngredientsListActivity : AppCompatActivity() {
     var typeIngredientListAdapter: TypeIngredientListAdapter? = null
     var floatingBtnAddTypeIngredient: FloatingActionButton? = null
     var typeIntent = ""
+    var filterListTypeIngredients : ArrayList<TypeIngredient> = arrayListOf()
+    var listUsableIdIngredients: ArrayList<Int> = arrayListOf()
+
+
     private val NEW_INGREDIENT = 1
     private val EDIT_INGREDIENT = 2
 
@@ -44,6 +47,9 @@ class TypeIngredientsListActivity : AppCompatActivity() {
         createHashMap()
 
         typeIntent = intent.getStringExtra("typeIntent").toString()
+        if (typeIntent == "choice") {
+            listUsableIdIngredients = intent.getIntegerArrayListExtra("listId") as ArrayList<Int>
+        }
 
         typeIngredientListAdapter = TypeIngredientListAdapter(this, info)
         listview?.adapter = (typeIngredientListAdapter)
@@ -67,10 +73,10 @@ class TypeIngredientsListActivity : AppCompatActivity() {
                     val id = ingredient?.id.toString()
                     val name = ingredient?.name
                     val resultIntent = Intent()
-                    resultIntent.putExtra( "id", id)
+                    resultIntent.putExtra("id", id)
                     resultIntent.putExtra("name", name)
                     setResult(Activity.RESULT_OK, resultIntent)
-                   finish()
+                    finish()
                 }
             }
         })
@@ -113,6 +119,7 @@ class TypeIngredientsListActivity : AppCompatActivity() {
         startActivityForResult(intent, EDIT_INGREDIENT)
     }
 
+
     private fun deleteIngredientAlert(ingredient: TypeIngredient) {
         val builder2 = AlertDialog.Builder(this@TypeIngredientsListActivity)
         builder2.setTitle("Vymazání suroviny")
@@ -132,6 +139,7 @@ class TypeIngredientsListActivity : AppCompatActivity() {
         dialog2.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     }
 
+
     override fun onResume() {
         super.onResume()
         createHashMap()
@@ -139,14 +147,26 @@ class TypeIngredientsListActivity : AppCompatActivity() {
         listview?.setAdapter(typeIngredientListAdapter)
     }
 
+    private fun filterTypeIngredients () {
+        filterListTypeIngredients = TypeIngredientsManager.listTypeIngredients.toMutableList() as ArrayList<TypeIngredient>
+        if (typeIntent == "choice" && !listUsableIdIngredients.isEmpty() && !filterListTypeIngredients.isEmpty()) {
+
+            for (id in listUsableIdIngredients) {
+                val condition: Predicate<TypeIngredient> = Predicate<TypeIngredient> { typeIngredient -> typeIngredient.id == id }
+                filterListTypeIngredients.removeIf(condition)
+            }
+        }
+    }
+
 
     private fun createHashMap () {
         var hashMap: HashMap<String, String> = HashMap<String, String>()
         info = ArrayList<HashMap<String, String>>()
-        for (i in 0..TypeIngredientsManager.listTypeIngredients.size - 1) {
+        filterTypeIngredients()
+        for (i in 0..filterListTypeIngredients.size - 1) {
             hashMap = HashMap()
-            TypeIngredientsManager.listTypeIngredients[i].name?.let { hashMap.put("name", it) }
-            TypeIngredientsManager.listTypeIngredients[i].valueSugar?.let { hashMap.put("value", it.toString()) }
+            filterListTypeIngredients[i].name?.let { hashMap.put("name", it) }
+            filterListTypeIngredients[i].valueSugar?.let { hashMap.put("value", it.toString()) }
             info.add(hashMap)
         }
     }

@@ -18,6 +18,21 @@ class Food (name: String){
         return true
     }
 
+    fun getUsableTypeIntents(): ArrayList<Int> {
+        var listId: ArrayList<Int> = arrayListOf()
+                if (listIngredients.isEmpty() ) return listId
+        for (ingredient in listIngredients) {
+            ingredient.typeIngredient?.id?.let { listId.add(it) }
+        }
+        return listId
+
+    }
+
+    fun deleteIngredient(ingredient: Ingredient):Boolean {
+        listIngredients.remove(ingredient)
+        return true
+    }
+
     fun getIngredientByName (name: String): Ingredient? {
         for (ingredient in listIngredients) {
             if (ingredient.name === name) return ingredient

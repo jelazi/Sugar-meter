@@ -8,143 +8,160 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:id="@+id/linearLayout">
-
-        <TextView
-            android:id="@+id/name_food_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textAlignment="center"
-            android:textSize="40sp"
-            android:text="Name of Food" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
-
+        android:fitsSystemWindows="true">
 
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="60sp"
-            android:gravity="center_vertical"
-            android:id="@+id/head_part_food_item"
-            android:weightSum="12"
-            >
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-
-            <ImageView
-                android:id="@+id/head_food_picture_part"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                />
+                android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/head_food_name_part"
-                android:layout_width="0dp"
+                <TextView
+                    android:id="@+id/name_food_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Name of Food"
+                    android:textAlignment="center"
+                    android:textSize="40sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/black" />
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:id="@+id/head_part_food_item"
+                android:layout_width="match_parent"
+                android:layout_height="60sp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:weightSum="12">
+
+
+                <ImageView
+                    android:id="@+id/head_food_picture_part"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:gravity="center" />
+
+                <TextView
+                    android:id="@+id/head_food_name_part"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:gravity="center"
+                    android:text="Surovina"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/head_food_weight_part"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="Váha (g)"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/food_sugar_part"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="center"
+                    android:text="Cukr (g)"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
+
+
+            </LinearLayout>
+            <ListView
+                android:id="@+id/listViewIngredient"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="4"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="20sp"
-                android:text="Surovina" />
+                android:longClickable="true"></ListView>
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                />
-
-            <TextView
-                android:id="@+id/head_food_weight_part"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:text="Váha" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                />
-
-            <TextView
-                android:id="@+id/food_sugar_part"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="2"
-                android:gravity="center"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:text="Cukr" />
+                android:orientation="vertical">
 
 
+                <View
+                    android:id="@+id/separator2"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/black" />
+
+                <TextView
+                    android:id="@+id/sum_food"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sum Food"
+                    android:textAlignment="center"
+                    android:textColor="@color/black"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:id="@+id/sum_suggar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Sum Sugar"
+                    android:textAlignment="center"
+                    android:textColor="@color/red"
+                    android:textSize="30sp" />
+
+                <View
+                    android:id="@+id/separator1"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/black" />
+
+                <Button
+                    android:id="@+id/btn_part_food"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:text="Btn part food" />
+
+
+                <TextView
+                    android:id="@+id/weight_sugar_part_food"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Weight sugar part food"
+                    android:textSize="30sp" />
+            </LinearLayout>
         </LinearLayout>
 
-        <ListView
-            android:id="@+id/listViewIngredient"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:longClickable="true">
-        </ListView>
 
-        <View
-            android:id="@+id/separator2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
+        l
 
-        <TextView
-            android:id="@+id/sum_food"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:text="Sum Food" />
-
-        <TextView
-            android:id="@+id/sum_suggar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:text="Sum Sugar" />
-
-        <View
-            android:id="@+id/separator1"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black"/>
-
-        <Button
-            android:id="@+id/btn_part_food"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Btn part food"/>
-
-        <TextView
-            android:id="@+id/weight_sugar_part_food"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="30sp"
-            android:text="Weight sugar part food" />
-
-
-    </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/floatingActionButtonAddIngredient"
