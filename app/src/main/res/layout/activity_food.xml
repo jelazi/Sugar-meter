@@ -25,6 +25,78 @@
             android:textSize="40sp"
             android:text="Name of Food" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"/>
+
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="60sp"
+            android:gravity="center_vertical"
+            android:id="@+id/head_part_food_item"
+            android:weightSum="12"
+            >
+
+
+            <ImageView
+                android:id="@+id/head_food_picture_part"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                />
+
+            <TextView
+                android:id="@+id/head_food_name_part"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:text="Surovina" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:id="@+id/head_food_weight_part"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:text="Váha" />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:id="@+id/food_sugar_part"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:text="Cukr" />
+
+
+        </LinearLayout>
+
         <ListView
             android:id="@+id/listViewIngredient"
             android:layout_width="match_parent"
@@ -32,12 +104,44 @@
             android:longClickable="true">
         </ListView>
 
+        <View
+            android:id="@+id/separator2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"/>
+
+        <TextView
+            android:id="@+id/sum_food"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:text="Sum Food" />
+
         <TextView
             android:id="@+id/sum_suggar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:text="Sum" />
+            android:text="Sum Sugar" />
+
+        <View
+            android:id="@+id/separator1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/black"/>
+
+        <Button
+            android:id="@+id/btn_part_food"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Btn part food"/>
+
+        <TextView
+            android:id="@+id/weight_sugar_part_food"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="30sp"
+            android:text="Weight sugar part food" />
 
 
     </LinearLayout>

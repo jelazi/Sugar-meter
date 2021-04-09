@@ -5,25 +5,33 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.activity_food.*
 import kotlinx.android.synthetic.main.activity_ingredient.*
-import java.math.RoundingMode
-import java.text.DecimalFormat
 
 class FoodActivity : AppCompatActivity() {
     var food : Food? = null
     var nameFood : String = ""
-    var sum: Double = 0.0
-    var sumTextView: TextView? = null
+    var sumWeightFood: Double = 0.0
+    var sumWeightSugar: Double = 0.0
+    var weightPartFood: Double = 0.0
+
+    var sumWeightFoodTextView: TextView? = null
+    var sumWeightSugarTextView: TextView? = null
+    var btnPartFood: Button? = null
+    var weightSugarPartFoodTextView: TextView? = null
+    var headFoodLayout: LinearLayout? = null
+
     var info = ArrayList<HashMap<String, String>>()
     var listView: ListView? = null
     var addIngredientFloatBtn: FloatingActionButton? = null
     var textViewName: TextView? = null
     var foodListAdapter: FoodListAdapter? = null
+    var sumVisibility = View.INVISIBLE
+    var weightSugarPartVisibility = View.INVISIBLE
     private val CHOICE_INGREDIENT = 1
 
 
@@ -36,8 +44,17 @@ class FoodActivity : AppCompatActivity() {
         //set actionbar title
         actionbar!!.title = "Zadání jídla"
         listView = findViewById(R.id.listViewIngredient) as ListView
-        sumTextView = findViewById(R.id.sum_suggar)
+
+        headFoodLayout = findViewById(R.id.head_part_food_item)
+        sumWeightFoodTextView = findViewById(R.id.sum_food)
+        sumWeightSugarTextView = findViewById(R.id.sum_suggar)
         addIngredientFloatBtn = findViewById(R.id.floatingActionButtonAddIngredient)
+        btnPartFood = findViewById(R.id.btn_part_food)
+        btnPartFood?.setOnClickListener {
+            setWeightPartFood()
+        }
+        weightSugarPartFoodTextView = findViewById(R.id.weight_sugar_part_food)
+
         textViewName = findViewById(R.id.name_food_text_view)
         if (nameFood.isEmpty()) {
             textViewName?.setText("Zadejte jméno jídla")
@@ -59,19 +76,44 @@ class FoodActivity : AppCompatActivity() {
         foodListAdapter = FoodListAdapter(this, info)
         listView?.adapter = (foodListAdapter)
         sumResult()
-        sumTextView?.setText("Celkem cukru: " + sum.toString() + " g")
-        sumTextView?.visibility = if (sum == 0.0){
-            View.INVISIBLE
+        sumWeightSugarTextView?.setText("Celkem cukru: " + "%.2f".format(sumWeightSugar) + " g")
+        sumWeightFoodTextView?.setText("Váha jídla: " + "%.2f".format(sumWeightFood) + " g")
+
+
+        if (sumWeightFood == 0.0){
+            sumVisibility = View.INVISIBLE
         } else{
-            View.VISIBLE
+            sumVisibility = View.VISIBLE
+        }
+        if (weightPartFood == 0.0) {
+            weightSugarPartVisibility = View.INVISIBLE
+        } else {
+            weightSugarPartVisibility = View.VISIBLE
+        }
+        headFoodLayout?.visibility = sumVisibility
+        sumWeightSugarTextView?.visibility = sumVisibility
+        sumWeightFoodTextView?.visibility = sumVisibility
+        btnPartFood?.visibility = sumVisibility
+        weightSugarPartFoodTextView?.visibility = weightSugarPartVisibility
+
+        if (nameFood.isEmpty()) {
+            name_food_text_view.setTextColor(this.getResources().getColor(R.color.gray))
+        } else {
+            name_food_text_view.setTextColor(this.getResources().getColor(R.color.black))
         }
     }
 
+    fun setWeightPartFood() {
+
+    }
+
     fun sumResult () {
-        sum = 0.0
+        sumWeightFood = 0.0
+        sumWeightSugar = 0.0
         if (food != null && !food?.listIngredients?.isEmpty()!!) {
             for (ingredients in food?.listIngredients!!) {
-                sum += ingredients.weight
+                sumWeightFood += ingredients.weight
+                sumWeightSugar +=ingredients.getWeightSugar()
             }
         }
     }
@@ -133,6 +175,7 @@ class FoodActivity : AppCompatActivity() {
                     addIngredient()
                 }
             }
+            reloadActivity()
         }
         builder.setNeutralButton("Zrušit"){_,_ ->
         }
