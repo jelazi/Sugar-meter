@@ -1,11 +1,13 @@
 package com.jelazi.sugarmeter
 
+import android.app.AlertDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SearchView
@@ -14,10 +16,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
     var floatingActionBtnAddFood: FloatingActionButton? = null
-    var listViewFood: ListView? = null
+    var listViewFoods: ListView? = null
     var searchView: SearchView? = null
     var info = ArrayList<HashMap<String, String>>()
-    var foodListAdapter: FoodListAdapter? = null
+    var foodListAdapter: FoodsListAdapter? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,11 +28,10 @@ class MainActivity : AppCompatActivity() {
 
         floatingActionBtnAddFood = findViewById(R.id.floatingActionButtonAddFood)
         searchView = findViewById(R.id.searchViewMain) as SearchView
-        listViewFood = findViewById(R.id.listViewFood) as ListView
+        listViewFoods = findViewById(R.id.listViewFoods) as ListView
 
         floatingActionBtnAddFood?.setOnClickListener{
-            val intent = Intent (this, FoodActivity::class.java)
-            startActivity(intent)
+            newFoodActivity()
         }
 
         loadData()
@@ -38,11 +39,11 @@ class MainActivity : AppCompatActivity() {
         //actionbar
         val actionbar = supportActionBar
         //set actionbar title
-        actionbar!!.title = "Měřič cukru"
+        actionbar!!.title = "Výběr jídla"
         createHashMap()
 
-        foodListAdapter = FoodListAdapter(this, info)
-        listViewFood?.adapter = (foodListAdapter)
+        foodListAdapter = FoodsListAdapter(this, info)
+        listViewFoods?.adapter = (foodListAdapter)
 
         searchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -56,14 +57,63 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        listViewFood?.setOnItemClickListener(object : AdapterView.OnItemClickListener {
+        listViewFoods?.setOnItemClickListener(object : AdapterView.OnItemClickListener {
             override fun onItemClick(adapterView: AdapterView<*>, view: View, i: Int, l: Long) {
                 val name = info[i].get("name")
-                startCookActivity(name.toString())
+                editFoodActivity(name.toString())
             }
         })
 
-      //  TypeIngredientsManager.clearIngredients()
+        listViewFoods?.setOnItemLongClickListener(object : AdapterView.OnItemLongClickListener {
+            override fun onItemLongClick(adapterView: AdapterView<*>, view: View, i: Int, l: Long): Boolean {
+                val clickFood = FoodsManager.getFoodByName(info[i].get("name").toString())
+                if (clickFood != null)
+                    alertDialogChoiceActivity(clickFood)
+                return true
+            }
+        })
+
+        if (FoodsManager.foodsList.isEmpty()) {
+            Toast.makeText(this@MainActivity, "Vytvořte své první jídlo.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    private fun alertDialogChoiceActivity(food: Food) {
+        val builder = AlertDialog.Builder(this@MainActivity)
+        builder.setTitle("Výběr možnosti")
+        builder.setMessage("Co chcete s jídlem: " + food.name + " udělat?")
+
+        builder.setPositiveButton("Editovat"){ dialog, which ->
+            editFoodActivity(food.name.toString())
+        }
+
+        builder.setNeutralButton("Vymazat"){ dialog, which ->
+            deleteFoodAlert(food)
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+        dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+    }
+
+    private fun deleteFoodAlert(food: Food) {
+        val builder2 = AlertDialog.Builder(this@MainActivity)
+        builder2.setTitle("Vymazání jídla")
+        builder2.setMessage("Opravdu chcete jídlo: " + food.name + " vymazat?")
+
+        builder2.setPositiveButton("Ano"){ dialog2, which ->
+            food.id.let { it?.let { it1 -> FoodsManager.deleteFood(it1) } }
+            FoodsManager.setListFoodsToPreferences(this)
+            onResume()
+        }
+
+        builder2.setNeutralButton("Ne"){ dialog2, which ->
+
+        }
+
+        val dialog2: AlertDialog = builder2.create()
+        dialog2.show()
+        dialog2.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -83,23 +133,48 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun startCookActivity(name: String) {
-        val intent = Intent (this, FoodActivity::class.java)
+
+
+    private fun reloadActivity() {
+        createHashMap()
+        foodListAdapter = FoodsListAdapter(this, info)
+        listViewFoods?.adapter = (foodListAdapter)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        reloadActivity()
+    }
+
+    private fun editFoodActivity(name: String) {
+        val food = FoodsManager.getFoodByName(name)
+        val intent
+        = Intent (this, FoodActivity::class.java)
+        intent.putExtra("typeIntent", "edit")
+        intent.putExtra("id", food?.id)
         startActivity(intent)
     }
+
+    private fun newFoodActivity() {
+        val intent
+                = Intent (this, FoodActivity::class.java)
+        intent.putExtra("typeIntent", "new")
+        startActivity(intent)
+    }
+
     private fun loadData() {
         TypeIngredientsManager.getListTypeIngredientsFromPreferences(this)
 
-        FoodManager.getListFoodsFromPreferences(this)
+        FoodsManager.getListFoodsFromPreferences(this)
     }
 
 
     private fun createHashMap () {
         var hashMap: HashMap<String, String> = HashMap<String, String>()
         info = ArrayList<HashMap<String, String>>()
-        for (i in 0..FoodManager.foodsList.size - 1) {
+        for (i in 0..FoodsManager.foodsList.size - 1) {
             hashMap = HashMap()
-            FoodManager.foodsList[i].name?.let { hashMap.put("name", it) }
+            FoodsManager.foodsList[i].name?.let { hashMap.put("name", it) }
             info.add(hashMap)
         }
     }

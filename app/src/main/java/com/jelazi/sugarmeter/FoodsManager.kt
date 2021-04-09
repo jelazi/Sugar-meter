@@ -1,10 +1,9 @@
 package com.jelazi.sugarmeter
 
 import android.app.Activity
-import android.util.Log
 import androidx.preference.PreferenceManager
 
-object FoodManager {
+object FoodsManager {
     var foodsList: ArrayList<Food> = arrayListOf()
     private val PREF_FOODS_LIST = "foods_list"
 
@@ -19,6 +18,25 @@ object FoodManager {
         return null
     }
 
+    fun getFoodById(id: Int): Food? {
+        if (foodsList.isEmpty()) return null
+        for (food in foodsList) {
+            if (food.id == id) return food
+        }
+        return null
+    }
+
+    fun deleteFood(id: Int): Boolean {
+        if (foodsList.isEmpty()) return false
+        for(i in 0..foodsList.size - 1) {
+            if (foodsList[i].id == id) {
+                foodsList.removeAt(i)
+                return true
+            }
+        }
+        return false
+    }
+
     fun addFood(food: Food): Boolean {
         if (!food.isCorrect()) return false
         foodsList.add(food)
@@ -29,16 +47,38 @@ object FoodManager {
         val preference = PreferenceManager.getDefaultSharedPreferences(activity)
         val listFoodsString: String? = preference.getString(PREF_FOODS_LIST, "")
         if (listFoodsString?.let { it.isEmpty() } == true) return false
-        listFoodsString?.let { FoodManager.foodsList = JsonParser.jsonToListFoods(it)}
+        listFoodsString?.let { FoodsManager.foodsList = JsonParser.jsonToListFoods(it)}
         return true
     }
 
-    fun setListTypeIngredientsToPreferences (activity: Activity): Boolean {
+    fun setListFoodsToPreferences (activity: Activity): Boolean {
         val listFoodsString: String = JsonParser.listFoodsToJson()
         val preference = PreferenceManager.getDefaultSharedPreferences(activity)
         val editor = preference.edit()
         editor.putString(PREF_FOODS_LIST, listFoodsString)
         editor.apply()
+        return true
+    }
+
+    private fun containsID(id: Int) : Boolean {
+        for (food in foodsList) {
+            if (food.id == id) return true
+        }
+        return false
+    }
+
+    fun getLastUsableId() : Int {
+        if (foodsList.isEmpty()) return 1
+        var id = 1
+        while (containsID(id)) {
+            id++
+        }
+        return id
+    }
+
+    fun clearFoods():Boolean {
+        if (foodsList.isEmpty()) return false
+        foodsList.clear()
         return true
     }
 

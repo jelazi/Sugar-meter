@@ -31,15 +31,29 @@ class FoodActivity : AppCompatActivity() {
     var listView: ListView? = null
     var addIngredientFloatBtn: FloatingActionButton? = null
     var textViewName: TextView? = null
-    var foodListAdapter: FoodListAdapter? = null
+    var ingredientsListAdapter: IngredientsListAdapter? = null
     var sumVisibility = View.INVISIBLE
     var weightSugarPartVisibility = View.INVISIBLE
     private val CHOICE_INGREDIENT = 1
+    var typeIntent = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_food)
+        if (intent.getStringExtra("typeIntent") != null) {
+            typeIntent = intent.getStringExtra("typeIntent").toString()
+            if (typeIntent == "edit") {
+                if (intent.getStringExtra("id") != null) {
+                    val id = intent.getStringExtra("id").toString().toInt()
+                    var f = FoodsManager.getFoodById(id)
+                    if (f != null) {
+                        food = f
+                    }
+                }
+            }
+        }
+
 
         //actionbar
         val actionbar = supportActionBar
@@ -88,7 +102,7 @@ class FoodActivity : AppCompatActivity() {
         builder.setMessage("Chcete jídlo: "+ food?.name.toString() + " uložit?")
 
         builder.setPositiveButton("Ano"){ dialog2, which ->
-            FoodManager.addFood(food!!)
+            saveFood()
             super.onBackPressed()
         }
 
@@ -102,11 +116,16 @@ class FoodActivity : AppCompatActivity() {
 
     }
 
+    fun saveFood() {
+        FoodsManager.addFood(food!!)
+        FoodsManager.setListFoodsToPreferences(this)
+    }
+
 
     fun reloadActivity() {
         createHashMap()
-        foodListAdapter = FoodListAdapter(this, info)
-        listView?.adapter = (foodListAdapter)
+        ingredientsListAdapter = IngredientsListAdapter(this, info)
+        listView?.adapter = (ingredientsListAdapter)
         sumResult()
         sumWeightSugarTextView?.setText("Celkem cukru: " + "%.2f".format(sumWeightSugar) + " g")
         sumWeightFoodTextView?.setText("Váha jídla: " + "%.2f".format(sumWeightFood) + " g")
@@ -282,7 +301,7 @@ class FoodActivity : AppCompatActivity() {
             } else {
                 nameFood = input.text.toString()
                 if (food == null) {
-                    food = Food(nameFood)
+                    food = Food(FoodsManager.getLastUsableId(), nameFood)
                 }
                 textViewName?.setText(nameFood)
                 if (isFromAddIngredient) {

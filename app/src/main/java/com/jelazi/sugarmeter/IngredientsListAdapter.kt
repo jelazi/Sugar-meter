@@ -13,7 +13,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class TypeIngredientListAdapter(context: Context, arrayList: ArrayList<HashMap<String, String>>) : BaseAdapter()  {
+class IngredientsListAdapter (context: Context, arrayList: ArrayList<HashMap<String, String>>) : BaseAdapter()  {
     var arrayList = arrayList
     var context = context
     var tempNameVersionList = ArrayList(arrayList)
@@ -26,12 +26,13 @@ class TypeIngredientListAdapter(context: Context, arrayList: ArrayList<HashMap<S
         if (convertView == null) {
             val mInflater = (context as Activity).layoutInflater
 
-            myview = mInflater!!.inflate(R.layout.type_ingredient_item, parent, false)
+            myview = mInflater!!.inflate(R.layout.ingredients_item, parent, false)
 
             holder = ViewHolder()
-            holder.name = myview!!.findViewById<TextView>(R.id.type_ingredient_name_part) as TextView
-            holder.value = myview!!.findViewById<TextView>(R.id.type_ingredient_value_part) as TextView
-            holder.image = myview!!.findViewById<TextView>(R.id.type_ingredient_picture_part) as ImageView
+            holder.name = myview!!.findViewById(R.id.ingredient_name_part) as TextView
+            holder.weight = myview!!.findViewById(R.id.ingredient_weight_part) as TextView
+            holder.image = myview!!.findViewById(R.id.ingredient_picture_part) as ImageView
+            holder.sugar = myview!!.findViewById(R.id.ingredient_sugar_part) as TextView
 
             myview.setTag(holder)
         } else {
@@ -41,15 +42,15 @@ class TypeIngredientListAdapter(context: Context, arrayList: ArrayList<HashMap<S
         val map = arrayList.get(position)
 
         holder.name!!.setText(map.get("name"))
-        holder.value!!.setText(map.get("value"))
+        holder.weight!!.setText(map.get("weight"))
+        holder.sugar!!.setText(map.get("valueSugar"))
         holder.image!!.setImageDrawable(
-                AvatarGenerator.avatarImage(
-                        context,
-                        100,
-                        AvatarConstants.CIRCLE,
-                        map.get("name").toString()
-                ))
-       // holder.image!!.setImageResource(map.get("lastDate"))
+            AvatarGenerator.avatarImage(
+                context,
+                100,
+                AvatarConstants.CIRCLE,
+                map.get("name").toString()
+            ))
 
         return myview
     }
@@ -70,7 +71,8 @@ class TypeIngredientListAdapter(context: Context, arrayList: ArrayList<HashMap<S
 
         var image: ImageView? = null
         var name: TextView? = null
-        var value: TextView? = null
+        var weight: TextView? = null
+        var sugar: TextView? = null
     }
 
     fun filter(text: String?) {
@@ -97,6 +99,5 @@ class TypeIngredientListAdapter(context: Context, arrayList: ArrayList<HashMap<S
         }
         notifyDataSetChanged()
     }
-
 
 }

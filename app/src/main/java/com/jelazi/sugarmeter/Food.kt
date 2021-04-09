@@ -3,13 +3,14 @@ package com.jelazi.sugarmeter
 import android.widget.Button
 import android.widget.ListView
 
-class Food (name: String){
+class Food (id: Int, name: String){
     var name: String? = null
     var listIngredients = arrayListOf<Ingredient>()
-
+    var id: Int? = null
 
     init {
         this.name = name
+        this.id = id
     }
 
     fun addIngredient(ingredient: Ingredient): Boolean {

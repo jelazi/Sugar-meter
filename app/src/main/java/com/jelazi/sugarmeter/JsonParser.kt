@@ -23,7 +23,7 @@ object JsonParser {
 
     fun listFoodsToJson ():String {
         val gsonPretty = GsonBuilder().setPrettyPrinting().create()
-        val jsonListBookPretty: String = gsonPretty.toJson(FoodManager.foodsList)
+        val jsonListBookPretty: String = gsonPretty.toJson(FoodsManager.foodsList)
         return jsonListBookPretty
     }
 
