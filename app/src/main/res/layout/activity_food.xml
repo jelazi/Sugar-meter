@@ -6,10 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".FoodActivity">
 
+
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true">
+
 
 
         <LinearLayout
@@ -37,6 +40,8 @@
                     android:background="@color/black" />
 
             </LinearLayout>
+
+
 
 
 
@@ -100,11 +105,19 @@
 
 
             </LinearLayout>
+
+
+
+
+
             <ListView
                 android:id="@+id/listViewIngredient"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="200dp"
                 android:longClickable="true"></ListView>
+
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -160,7 +173,7 @@
         </LinearLayout>
 
 
-        l
+
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -173,6 +186,9 @@
             android:layout_margin="16dp"
             app:srcCompat="@android:drawable/ic_input_add" />
 
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
