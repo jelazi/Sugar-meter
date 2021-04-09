@@ -37,18 +37,21 @@ class TypeIngredientsListActivity : AppCompatActivity() {
         floatingBtnAddTypeIngredient?.setOnClickListener {
             addTypeIngredient()
         }
+        typeIntent = intent.getStringExtra("typeIntent").toString()
 
         //actionbar
         val actionbar = supportActionBar
         //set actionbar title
-        actionbar!!.title = "Výběr surovin"
         //set back button
-        actionbar.setDisplayHomeAsUpEnabled(true)
+        actionbar!!.setDisplayHomeAsUpEnabled(true)
         createHashMap()
 
-        typeIntent = intent.getStringExtra("typeIntent").toString()
+
         if (typeIntent == "choice") {
             listUsableIdIngredients = intent.getIntegerArrayListExtra("listId") as ArrayList<Int>
+            actionbar!!.title = "Výběr surovin"
+        } else {
+            actionbar!!.title = "Prohlížení surovin"
         }
 
         typeIngredientListAdapter = TypeIngredientListAdapter(this, info)
@@ -93,6 +96,11 @@ class TypeIngredientsListActivity : AppCompatActivity() {
         if (TypeIngredientsManager.listTypeIngredients.isEmpty()) {
             Toast.makeText(this@TypeIngredientsListActivity, "Nejdříve vytvořte nějakou surovinu.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     private fun alertDialogChoiceActivity(ingredient: TypeIngredient) {

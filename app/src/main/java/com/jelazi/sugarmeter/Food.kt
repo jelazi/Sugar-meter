@@ -48,6 +48,32 @@ class Food (name: String){
         return false
     }
 
+    fun sumWeightFood(): Double {
+        if (listIngredients.isEmpty()) return 0.0
+        var result = 0.0
+        for (ingredient in listIngredients) {
+            result += ingredient.weight
+        }
+        return result
+    }
+
+    fun sumWeightSugar(): Double {
+        if (listIngredients.isEmpty()) return 0.0
+        var result = 0.0
+        for (ingredient in listIngredients) {
+            result += ingredient.getWeightSugar()
+        }
+        return result
+    }
+
+    fun weightSugarInPartFood(weightPartFood: Double):Double  {
+        if (weightPartFood == 0.0 || listIngredients.isEmpty()) return 0.0
+        var weightFood = sumWeightFood()
+        var weighSugar = sumWeightSugar()
+        var ratio = weighSugar / weightFood
+        return weightPartFood * ratio
+    }
+
     fun isCorrect():Boolean {
         if (name.isNullOrEmpty()) return false
         if (listIngredients.isEmpty()) return false

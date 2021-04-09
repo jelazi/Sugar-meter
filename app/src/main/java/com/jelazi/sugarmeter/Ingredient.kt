@@ -27,7 +27,7 @@ class Ingredient (typeIngredient: TypeIngredient, weight: Double) {
     }
 
     fun isCorrect():Boolean {
-        if (typeIngredient == null || typeIngredient.let {isCorrect()}) return false
+        if (typeIngredient == null ) return false
         if (weight <= 0.0) return false
         if (name.isNullOrEmpty()) return false
         return true

@@ -160,14 +160,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
-                    android:text="Btn part food" />
+                    android:text="Porce" />
 
 
                 <TextView
                     android:id="@+id/weight_sugar_part_food"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="right"
                     android:text="Weight sugar part food"
+                    android:layout_margin="16dp"
                     android:textSize="30sp" />
             </LinearLayout>
         </LinearLayout>

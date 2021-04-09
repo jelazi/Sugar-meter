@@ -3,15 +3,17 @@ package com.jelazi.sugarmeter
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SearchView
+import android.widget.Toast
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class MainActivity : AppCompatActivity() {
     var floatingActionBtnAddFood: FloatingActionButton? = null
-    var floatingActionBtnAddIngredient: FloatingActionButton? = null
     var listViewFood: ListView? = null
     var searchView: SearchView? = null
     var info = ArrayList<HashMap<String, String>>()
@@ -23,7 +25,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         floatingActionBtnAddFood = findViewById(R.id.floatingActionButtonAddFood)
-        floatingActionBtnAddIngredient = findViewById(R.id.floatingActionButtonEditIngredient)
         searchView = findViewById(R.id.searchViewMain) as SearchView
         listViewFood = findViewById(R.id.listViewFood) as ListView
 
@@ -32,10 +33,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        floatingActionBtnAddIngredient?.setOnClickListener{
-            val intent = Intent (this, TypeIngredientsListActivity::class.java)
-            startActivity(intent)
-        }
         loadData()
 
         //actionbar
@@ -67,6 +64,23 @@ class MainActivity : AppCompatActivity() {
         })
 
       //  TypeIngredientsManager.clearIngredients()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.list_ingredients -> {
+                val intent = Intent (this, TypeIngredientsListActivity::class.java)
+                startActivity(intent)
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun startCookActivity(name: String) {

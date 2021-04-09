@@ -42,14 +42,6 @@
         android:layout_margin="16dp"
         app:srcCompat="@android:drawable/ic_input_add" />
 
-<com.google.android.material.floatingactionbutton.FloatingActionButton
-android:id="@+id/floatingActionButtonEditIngredient"
-android:layout_width="wrap_content"
-android:layout_height="wrap_content"
-android:clickable="true"
-app:layout_anchor="@id/linearLayout"
-app:layout_anchorGravity="bottom|right"
-android:layout_margin="16dp"
-app:srcCompat="@android:drawable/ic_input_add" />
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

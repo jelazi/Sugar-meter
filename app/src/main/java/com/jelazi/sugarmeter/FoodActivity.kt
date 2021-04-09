@@ -45,6 +45,7 @@ class FoodActivity : AppCompatActivity() {
         val actionbar = supportActionBar
         //set actionbar title
         actionbar!!.title = "Zadání jídla"
+        actionbar.setDisplayHomeAsUpEnabled(true)
         listView = findViewById(R.id.listViewIngredient) as ListView
 
         headFoodLayout = findViewById(R.id.head_part_food_item)
@@ -70,6 +71,35 @@ class FoodActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         reloadActivity()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+    override fun onBackPressed() {
+        if (food?.isCorrect() != true) {
+            super.onBackPressed()
+            return
+        }
+        val builder = AlertDialog.Builder(this@FoodActivity)
+        builder.setTitle("Neuložené jídlo")
+        builder.setMessage("Chcete jídlo: "+ food?.name.toString() + " uložit?")
+
+        builder.setPositiveButton("Ano"){ dialog2, which ->
+            FoodManager.addFood(food!!)
+            super.onBackPressed()
+        }
+
+        builder.setNeutralButton("Ne"){ dialog2, which ->
+            super.onBackPressed()
+        }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+        dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+
     }
 
 
@@ -99,6 +129,7 @@ class FoodActivity : AppCompatActivity() {
         separator1?.visibility = sumVisibility
         separator2?.visibility = sumVisibility
         weightSugarPartFoodTextView?.visibility = weightSugarPartVisibility
+        weight_sugar_part_food.setText("Cukru v porci: " + "%.2f".format(food?.weightSugarInPartFood(weightPartFood)) + " g")
 
         if (nameFood.isEmpty()) {
             name_food_text_view.setTextColor(this.getResources().getColor(R.color.gray))
@@ -108,6 +139,38 @@ class FoodActivity : AppCompatActivity() {
     }
 
     fun setWeightPartFood() {
+        val builder = AlertDialog.Builder(this@FoodActivity)
+        builder.setTitle("Porce jídla")
+        builder.setMessage("Zadejte množství porce: ")
+        val input = EditText(this@FoodActivity)
+        input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        val lp = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        input.layoutParams = lp
+
+        input.setText(weightPartFood.toString())
+        input.setSelectAllOnFocus(true)
+        input.requestFocus()
+        builder.setView(input)
+
+        builder.setPositiveButton("ANO"){ dialog, which ->
+            weightPartFood = input.text.toString().toDouble()
+            if (weightPartFood != 0.0) {
+                btnPartFood?.setText("Porce: " + "%.2f".format(weightPartFood) + " g")
+                weight_sugar_part_food.setText("Cukru v porci: " + "%.2f".format(food?.weightSugarInPartFood(weightPartFood)) + " g")
+                reloadActivity()
+            } else {
+                Toast.makeText(this@FoodActivity, "Pole hodnota nesmí být nula.", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        builder.setNeutralButton("Zrušit"){ _, _ ->
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+        dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
 
     }
 
@@ -115,10 +178,8 @@ class FoodActivity : AppCompatActivity() {
         sumWeightFood = 0.0
         sumWeightSugar = 0.0
         if (food != null && !food?.listIngredients?.isEmpty()!!) {
-            for (ingredients in food?.listIngredients!!) {
-                sumWeightFood += ingredients.weight
-                sumWeightSugar +=ingredients.getWeightSugar()
-            }
+            sumWeightFood = food?.sumWeightFood()!!
+            sumWeightSugar = food?.sumWeightSugar()!!
         }
     }
 
@@ -162,6 +223,7 @@ class FoodActivity : AppCompatActivity() {
                 return true
             }
         })
+
     }
     private fun alertDialogChoiceActivity(ingredient: Ingredient) {
         val builder = AlertDialog.Builder(this@FoodActivity)
