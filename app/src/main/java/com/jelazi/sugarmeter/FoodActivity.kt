@@ -2,15 +2,21 @@ package com.jelazi.sugarmeter
 
 import android.app.AlertDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.InputType
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_food.*
 import kotlinx.android.synthetic.main.activity_ingredient.*
+import kotlin.properties.Delegates
 
 class FoodActivity : AppCompatActivity() {
     var food : Food? = null
@@ -36,6 +42,11 @@ class FoodActivity : AppCompatActivity() {
     var weightSugarPartVisibility = View.INVISIBLE
     private val CHOICE_INGREDIENT = 1
     var typeIntent = ""
+    var isChange :Boolean by Delegates.observable(false) { prop, old, new ->
+        isChangeValue()
+    }
+    val listen : MutableLiveData<Boolean> =  MutableLiveData()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +60,7 @@ class FoodActivity : AppCompatActivity() {
                     var f = FoodsManager.getFoodById(id)
                     if (f != null) {
                         food = f
+                        nameFood = food?.name.toString()
                     }
                 }
             }
@@ -92,17 +104,23 @@ class FoodActivity : AppCompatActivity() {
         return true
     }
 
+
+
     override fun onBackPressed() {
+        if (!isChange) {
+            super.onBackPressed()
+            return
+        }
         if (food?.isCorrect() != true) {
             super.onBackPressed()
             return
         }
         val builder = AlertDialog.Builder(this@FoodActivity)
         builder.setTitle("Neuložené jídlo")
-        builder.setMessage("Chcete jídlo: "+ food?.name.toString() + " uložit?")
+        builder.setMessage("Chcete jídlo: " + food?.name.toString() + " uložit?")
 
         builder.setPositiveButton("Ano"){ dialog2, which ->
-            saveFood()
+            changeFood()
             super.onBackPressed()
         }
 
@@ -116,9 +134,42 @@ class FoodActivity : AppCompatActivity() {
 
     }
 
-    fun saveFood() {
-        FoodsManager.addFood(food!!)
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.food_menu, menu)
+
+
+        return true
+    }
+
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.save_food_item -> {
+                changeFood()
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+
+
+    private fun isChangeValue() {
+        weightPartFood = 0.0
+        reloadActivity()
+    }
+
+    fun changeFood() {
+        if (typeIntent == "edit") {
+            FoodsManager.changeFood(food!!)
+        } else {
+            FoodsManager.addFood(food!!)
+        }
         FoodsManager.setListFoodsToPreferences(this)
+        isChange = false
     }
 
 
@@ -138,6 +189,7 @@ class FoodActivity : AppCompatActivity() {
         }
         if (weightPartFood == 0.0) {
             weightSugarPartVisibility = View.INVISIBLE
+            btnPartFood?.setText("Porce")
         } else {
             weightSugarPartVisibility = View.VISIBLE
         }
@@ -159,13 +211,14 @@ class FoodActivity : AppCompatActivity() {
 
     fun setWeightPartFood() {
         val builder = AlertDialog.Builder(this@FoodActivity)
+        val weight = food?.sumWeightFood()
         builder.setTitle("Porce jídla")
-        builder.setMessage("Zadejte množství porce: ")
+        builder.setMessage("Zadejte množství porce:  (max. " + weight.toString() + " g)")
         val input = EditText(this@FoodActivity)
         input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         val lp = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
         )
         input.layoutParams = lp
 
@@ -177,9 +230,13 @@ class FoodActivity : AppCompatActivity() {
         builder.setPositiveButton("ANO"){ dialog, which ->
             weightPartFood = input.text.toString().toDouble()
             if (weightPartFood != 0.0) {
-                btnPartFood?.setText("Porce: " + "%.2f".format(weightPartFood) + " g")
-                weight_sugar_part_food.setText("Cukru v porci: " + "%.2f".format(food?.weightSugarInPartFood(weightPartFood)) + " g")
-                reloadActivity()
+                if (weightPartFood > weight!!) {
+                    Toast.makeText(this@FoodActivity, "Porce je větší než uvařené jídlo.", Toast.LENGTH_SHORT).show()
+                } else {
+                    btnPartFood?.setText("Porce: " + "%.2f".format(weightPartFood) + " g")
+                    weight_sugar_part_food.setText("Cukru v porci: " + "%.2f".format(food?.weightSugarInPartFood(weightPartFood)) + " g")
+                    reloadActivity()
+                }
             } else {
                 Toast.makeText(this@FoodActivity, "Pole hodnota nesmí být nula.", Toast.LENGTH_SHORT).show()
             }
@@ -269,6 +326,7 @@ class FoodActivity : AppCompatActivity() {
 
         builder2.setPositiveButton("Ano"){ dialog2, which ->
             food?.deleteIngredient(ingredient)
+            isChange = true
             reloadActivity()
         }
 
@@ -281,14 +339,14 @@ class FoodActivity : AppCompatActivity() {
         dialog2.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     }
 
-    private fun changeName (isFromAddIngredient: Boolean) {
+    private fun changeName(isFromAddIngredient: Boolean) {
         val builder = AlertDialog.Builder(this@FoodActivity)
         builder.setTitle("Zadejte jméno jídla")
         builder.setMessage("Uložit toto jméno?")
         val input = EditText(this@FoodActivity)
         val lp = LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.MATCH_PARENT
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
         )
         input.layoutParams = lp
         input.setText(nameFood)
@@ -302,15 +360,18 @@ class FoodActivity : AppCompatActivity() {
                 nameFood = input.text.toString()
                 if (food == null) {
                     food = Food(FoodsManager.getLastUsableId(), nameFood)
+                } else {
+                    food?.name = nameFood
                 }
                 textViewName?.setText(nameFood)
                 if (isFromAddIngredient) {
                     addIngredient()
                 }
+                isChange = true
             }
             reloadActivity()
         }
-        builder.setNeutralButton("Zrušit"){_,_ ->
+        builder.setNeutralButton("Zrušit"){ _, _ ->
         }
 
         val dialog: AlertDialog = builder.create()
@@ -368,6 +429,7 @@ class FoodActivity : AppCompatActivity() {
             weight = input.text.toString().toDouble()
             if (weight != 0.0) {
                 ingredient.changeWeight(weight)
+                isChange = true
                 reloadActivity()
             } else {
                 Toast.makeText(this@FoodActivity, "Pole hodnota nesmí být nula.", Toast.LENGTH_SHORT).show()
@@ -405,6 +467,7 @@ class FoodActivity : AppCompatActivity() {
             if (weight != 0.0) {
                 var ingredient = Ingredient(typeIngredient, weight)
                 food?.addIngredient(ingredient)
+                isChange = true
                 reloadActivity()
             } else {
                 Toast.makeText(this@FoodActivity, "Pole hodnota nesmí být nulová.", Toast.LENGTH_SHORT).show()

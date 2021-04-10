@@ -43,6 +43,15 @@ object FoodsManager {
         return true
     }
 
+
+    fun changeFood(newFood:Food):Boolean {
+        if (!newFood.isCorrect()) return false
+        var oldFood = newFood.id?.let { getFoodById(it) }
+        if (oldFood?.name != newFood.name) oldFood?.name = newFood.name
+        if (oldFood?.listIngredients != newFood.listIngredients) oldFood?.listIngredients = newFood.listIngredients
+        return true
+    }
+
     fun getListFoodsFromPreferences (activity: Activity):Boolean {
         val preference = PreferenceManager.getDefaultSharedPreferences(activity)
         val listFoodsString: String? = preference.getString(PREF_FOODS_LIST, "")

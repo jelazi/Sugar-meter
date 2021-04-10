@@ -35,6 +35,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         loadData()
+       // FoodsManager.clearFoods()
+       // FoodsManager.setListFoodsToPreferences(this)
 
         //actionbar
         val actionbar = supportActionBar
@@ -74,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         if (FoodsManager.foodsList.isEmpty()) {
-            Toast.makeText(this@MainActivity, "Vytvořte své první jídlo.", Toast.LENGTH_SHORT).show()
+            Toast(this).showCustomToast ("Vytvořte své první jídlo.",this)
         }
     }
 
@@ -151,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         val intent
         = Intent (this, FoodActivity::class.java)
         intent.putExtra("typeIntent", "edit")
-        intent.putExtra("id", food?.id)
+        intent.putExtra("id", food?.id.toString())
         startActivity(intent)
     }
 
