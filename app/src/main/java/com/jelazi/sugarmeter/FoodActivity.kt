@@ -235,7 +235,7 @@ class FoodActivity : AppCompatActivity() {
             weightPartFood = input.text.toString().toDouble()
             if (weightPartFood != 0.0) {
                 if (weightPartFood > weight!!) {
-                    Toast.makeText(this@FoodActivity, resources.getString(R.string.warning_part_is_bigger), Toast.LENGTH_SHORT).show()
+                    Toast(this).showCustomToast (resources.getString(R.string.warning_part_is_bigger),this)
                 } else {
                     btnPartFood?.setText(resources.getString(R.string.part_food_is) + "%.2f".format(weightPartFood) + " g")
                     weightSugarPartFoodTextView?.setText(resources.getString(R.string.sugar_in_part) + "%.2f".format(food?.weightSugarInPartFood(weightPartFood)) + resources.getString(R.string.g_item))
@@ -243,7 +243,7 @@ class FoodActivity : AppCompatActivity() {
                     reloadActivity()
                 }
             } else {
-                Toast.makeText(this@FoodActivity, resources.getString(R.string.warning_is_null), Toast.LENGTH_SHORT).show()
+                Toast(this).showCustomToast (resources.getString(R.string.warning_is_null),this)
             }
         }
 
@@ -360,7 +360,7 @@ class FoodActivity : AppCompatActivity() {
 
         builder.setPositiveButton(resources.getString(R.string.yes)) { dialog, which ->
             if (input.text.toString().isNullOrEmpty()) {
-                Toast.makeText(this@FoodActivity, resources.getString(R.string.warning_is_empty), Toast.LENGTH_SHORT).show()
+                Toast(this).showCustomToast (resources.getString(R.string.warning_is_empty),this)
             } else {
                 nameFood = input.text.toString()
                 if (food == null) {
@@ -406,7 +406,7 @@ class FoodActivity : AppCompatActivity() {
             if (typeIngredient != null) {
                 addIngredientDialog(typeIngredient)
             } else {
-                Toast.makeText(this@FoodActivity, resources.getString(R.string.warning_is_null), Toast.LENGTH_SHORT).show()
+                Toast(this).showCustomToast (resources.getString(R.string.warning_is_null),this)
             }
         }
     }
@@ -437,7 +437,7 @@ class FoodActivity : AppCompatActivity() {
                 isChange = true
                 reloadActivity()
             } else {
-                Toast.makeText(this@FoodActivity, resources.getString(R.string.warning_is_null), Toast.LENGTH_SHORT).show()
+                Toast(this).showCustomToast (resources.getString(R.string.warning_is_null),this)
             }
         }
 
@@ -475,7 +475,7 @@ class FoodActivity : AppCompatActivity() {
                 isChange = true
                 reloadActivity()
             } else {
-                Toast.makeText(this@FoodActivity, resources.getString(R.string.warning_is_null), Toast.LENGTH_SHORT).show()
+                Toast(this).showCustomToast (resources.getString(R.string.warning_is_null),this)
             }
         }
 

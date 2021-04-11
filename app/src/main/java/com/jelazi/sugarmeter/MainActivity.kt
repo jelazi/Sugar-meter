@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         if (FoodsManager.foodsList.isEmpty()) {
-            Toast(this).showCustomToast (resources.getString(R.string.main_activity_title),this)
+            Toast(this).showCustomToast (resources.getString(R.string.create_first_food),this)
         }
     }
 

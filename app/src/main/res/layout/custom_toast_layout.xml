@@ -36,7 +36,7 @@
                     android:id="@+id/button_accent_border"
                     android:layout_width="4dp"
                     android:layout_height="match_parent"
-                    android:background="#3EAA56" />
+                    android:background="@color/purple_500" />
 
                 <TextView
                     android:id="@+id/toast_text"
@@ -45,7 +45,6 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="17dp"
                     android:ellipsize="end"
-                    android:lines="1"
                     android:text="This is a custom Toast"
                     android:textColor="#131313"
                     android:textSize="18sp"

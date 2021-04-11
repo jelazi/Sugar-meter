@@ -35,6 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="true"
+        app:backgroundTint="@color/purple_500"
         app:layout_anchor="@id/linearLayout"
         app:layout_anchorGravity="bottom|left"
         android:layout_margin="16dp"

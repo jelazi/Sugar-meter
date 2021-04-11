@@ -19,7 +19,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textSize="40sp"
-                android:text="Name of Ingredient" />
+                android:text="Jméno suroviny" />
 
             <TextView
                 android:id="@+id/value_ingredient"
@@ -37,7 +37,7 @@
                 android:id="@+id/btn_save_ingredient"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Save Ingredient" />
+                android:text="Ulož surovinu" />
 
         </LinearLayout>
 

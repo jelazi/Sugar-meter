@@ -94,7 +94,7 @@ class TypeIngredientsListActivity : AppCompatActivity() {
         })
 
         if (TypeIngredientsManager.listTypeIngredients.isEmpty()) {
-            Toast.makeText(this@TypeIngredientsListActivity, "Nejdříve vytvořte nějakou surovinu.", Toast.LENGTH_SHORT).show()
+            Toast(this).showCustomToast ("Nejdříve vytvořte nějakou surovinu.",this)
         }
     }
 
@@ -135,6 +135,7 @@ class TypeIngredientsListActivity : AppCompatActivity() {
 
         builder2.setPositiveButton(resources.getString(R.string.yes)){ dialog2, which ->
             ingredient.id.let { it?.let { it1 -> TypeIngredientsManager.deleteIngredient(it1) } }
+            TypeIngredientsManager.setListTypeIngredientsToPreferences(this)
             onResume()
         }
 

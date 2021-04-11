@@ -51,6 +51,40 @@ class TypeIngredientActivity : AppCompatActivity() {
         reloadActivity()
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
+
+    override fun onBackPressed() {
+        if (!isChangeName && !isChangeValue) {
+            super.onBackPressed()
+            return
+        }
+        if (typeIngredient?.isCorrect() != true) {
+            super.onBackPressed()
+            return
+        }
+        val builder = AlertDialog.Builder(this@TypeIngredientActivity)
+        builder.setTitle("Uložení suroviny")
+        builder.setMessage("Chcete surovinu: " + typeIngredient?.name.toString() + resources.getString(R.string.save_food_question_part_two))
+
+        builder.setPositiveButton(resources.getString(R.string.yes)){ dialog2, which ->
+            saveIngredient()
+            super.onBackPressed()
+        }
+
+        builder.setNeutralButton(resources.getString(R.string.no)){ dialog2, which ->
+            super.onBackPressed()
+        }
+
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+        dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+
+    }
+
 
     fun initItems () {
         name_ingredient.text
@@ -117,7 +151,8 @@ class TypeIngredientActivity : AppCompatActivity() {
                     isChangeName = true
                     reloadActivity()
                 } else {
-                    Toast.makeText(this@TypeIngredientActivity, resources.getString(R.string.name_is_same), Toast.LENGTH_SHORT).show()
+                    Toast(this).showCustomToast (resources.getString(R.string.name_is_same),this)
+
                 }
         }
 
@@ -166,12 +201,12 @@ class TypeIngredientActivity : AppCompatActivity() {
 
     fun saveIngredient () {
         if (typeIngredient?.name.isNullOrEmpty()) {
-            Toast.makeText(this@TypeIngredientActivity, resources.getString(R.string.field_name_empty), Toast.LENGTH_SHORT).show()
+            Toast(this).showCustomToast (resources.getString(R.string.field_name_empty),this)
             return
         }
 
         if (typeIngredient?.valueSugar == null || typeIngredient?.valueSugar == 0.0) {
-            Toast.makeText(this@TypeIngredientActivity, resources.getString(R.string.field_value_empty), Toast.LENGTH_SHORT).show()
+            Toast(this).showCustomToast (resources.getString(R.string.field_value_empty),this)
             return
         }
 
