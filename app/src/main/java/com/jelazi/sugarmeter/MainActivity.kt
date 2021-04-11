@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         //actionbar
         val actionbar = supportActionBar
         //set actionbar title
-        actionbar!!.title = "Výběr jídla"
+        actionbar!!.title = resources.getString(R.string.main_activity_title)
         createHashMap()
 
         foodListAdapter = FoodsListAdapter(this, info)
@@ -76,21 +76,21 @@ class MainActivity : AppCompatActivity() {
         })
 
         if (FoodsManager.foodsList.isEmpty()) {
-            Toast(this).showCustomToast ("Vytvořte své první jídlo.",this)
+            Toast(this).showCustomToast (resources.getString(R.string.main_activity_title),this)
         }
     }
 
 
     private fun alertDialogChoiceActivity(food: Food) {
         val builder = AlertDialog.Builder(this@MainActivity)
-        builder.setTitle("Výběr možnosti")
-        builder.setMessage("Co chcete s jídlem: " + food.name + " udělat?")
+        builder.setTitle(resources.getString(R.string.select_choice))
+        builder.setMessage(resources.getString(R.string.what_do_you_with_food) + food.name + resources.getString(R.string.do_with_food))
 
-        builder.setPositiveButton("Editovat"){ dialog, which ->
+        builder.setPositiveButton(resources.getString(R.string.to_edit)){ dialog, which ->
             editFoodActivity(food.name.toString())
         }
 
-        builder.setNeutralButton("Vymazat"){ dialog, which ->
+        builder.setNeutralButton(resources.getString(R.string.to_erase)){ dialog, which ->
             deleteFoodAlert(food)
         }
         val dialog: AlertDialog = builder.create()
@@ -100,16 +100,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun deleteFoodAlert(food: Food) {
         val builder2 = AlertDialog.Builder(this@MainActivity)
-        builder2.setTitle("Vymazání jídla")
-        builder2.setMessage("Opravdu chcete jídlo: " + food.name + " vymazat?")
+        builder2.setTitle(resources.getString(R.string.erase_food))
+        builder2.setMessage(resources.getString(R.string.do_you_realy_food) + food.name + resources.getString(R.string.erase_question_mark))
 
-        builder2.setPositiveButton("Ano"){ dialog2, which ->
+        builder2.setPositiveButton(resources.getString(R.string.yes)){ dialog2, which ->
             food.id.let { it?.let { it1 -> FoodsManager.deleteFood(it1) } }
             FoodsManager.setListFoodsToPreferences(this)
             onResume()
         }
 
-        builder2.setNeutralButton("Ne"){ dialog2, which ->
+        builder2.setNeutralButton(resources.getString(R.string.no)){ dialog2, which ->
 
         }
 

@@ -49,9 +49,9 @@ class TypeIngredientsListActivity : AppCompatActivity() {
 
         if (typeIntent == "choice") {
             listUsableIdIngredients = intent.getIntegerArrayListExtra("listId") as ArrayList<Int>
-            actionbar!!.title = "Výběr surovin"
+            actionbar!!.title = resources.getString(R.string.ingredient_list_title_choice)
         } else {
-            actionbar!!.title = "Prohlížení surovin"
+            actionbar!!.title = resources.getString(R.string.ingredient_list_title_view)
         }
 
         typeIngredientListAdapter = TypeIngredientListAdapter(this, info)
@@ -105,14 +105,14 @@ class TypeIngredientsListActivity : AppCompatActivity() {
 
     private fun alertDialogChoiceActivity(ingredient: TypeIngredient) {
         val builder = AlertDialog.Builder(this@TypeIngredientsListActivity)
-        builder.setTitle("Výběr možnosti")
-        builder.setMessage("Co chcete se surovinou udělat?")
+        builder.setTitle(resources.getString(R.string.select_choice))
+        builder.setMessage(resources.getString(R.string.what_do_you_with_ingredient) + resources.getString(R.string.do_with_food))
 
-        builder.setPositiveButton("Editovat"){ dialog, which ->
+        builder.setPositiveButton(resources.getString(R.string.to_edit)){ dialog, which ->
             openIngredientActivityForEdit(ingredient)
         }
 
-        builder.setNeutralButton("Vymazat"){ dialog, which ->
+        builder.setNeutralButton(resources.getString(R.string.to_erase)){ dialog, which ->
             deleteIngredientAlert(ingredient)
         }
         val dialog: AlertDialog = builder.create()
@@ -133,12 +133,12 @@ class TypeIngredientsListActivity : AppCompatActivity() {
         builder2.setTitle("Vymazání suroviny")
         builder2.setMessage("Opravdu chcete surovinu: " + ingredient.name + " vymazat?")
 
-        builder2.setPositiveButton("Ano"){ dialog2, which ->
+        builder2.setPositiveButton(resources.getString(R.string.yes)){ dialog2, which ->
             ingredient.id.let { it?.let { it1 -> TypeIngredientsManager.deleteIngredient(it1) } }
             onResume()
         }
 
-        builder2.setNeutralButton("Ne"){ dialog2, which ->
+        builder2.setNeutralButton(resources.getString(R.string.no)){ dialog2, which ->
 
         }
 

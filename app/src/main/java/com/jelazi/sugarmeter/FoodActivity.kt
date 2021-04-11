@@ -29,6 +29,7 @@ class FoodActivity : AppCompatActivity() {
     var sumWeightSugarTextView: TextView? = null
     var btnPartFood: Button? = null
     var weightSugarPartFoodTextView: TextView? = null
+    var sugarInOneGramTextView: TextView? = null
     var headFoodLayout: LinearLayout? = null
     var separator1: View? = null
     var separator2: View? = null
@@ -70,7 +71,7 @@ class FoodActivity : AppCompatActivity() {
         //actionbar
         val actionbar = supportActionBar
         //set actionbar title
-        actionbar!!.title = "Zadání jídla"
+        actionbar!!.title = resources.getString(R.string.food_activity_title)
         actionbar.setDisplayHomeAsUpEnabled(true)
         listView = findViewById(R.id.listViewIngredient) as ListView
 
@@ -78,6 +79,7 @@ class FoodActivity : AppCompatActivity() {
         sumWeightFoodTextView = findViewById(R.id.sum_food)
         sumWeightSugarTextView = findViewById(R.id.sum_suggar)
         addIngredientFloatBtn = findViewById(R.id.floatingActionButtonAddIngredient)
+        sugarInOneGramTextView = findViewById(R.id.sugar_in_one_gram)
         btnPartFood = findViewById(R.id.btn_part_food)
 
         weightSugarPartFoodTextView = findViewById(R.id.weight_sugar_part_food)
@@ -86,7 +88,7 @@ class FoodActivity : AppCompatActivity() {
 
         textViewName = findViewById(R.id.name_food_text_view)
         if (nameFood.isEmpty()) {
-            textViewName?.setText("Zadejte jméno jídla")
+            textViewName?.setText(resources.getString(R.string.set_food_name))
         } else {
             textViewName?.setText(nameFood)
         }
@@ -116,15 +118,15 @@ class FoodActivity : AppCompatActivity() {
             return
         }
         val builder = AlertDialog.Builder(this@FoodActivity)
-        builder.setTitle("Neuložené jídlo")
-        builder.setMessage("Chcete jídlo: " + food?.name.toString() + " uložit?")
+        builder.setTitle(resources.getString(R.string.save_food_title))
+        builder.setMessage(resources.getString(R.string.save_food_question_part_one) + food?.name.toString() + resources.getString(R.string.save_food_question_part_two))
 
-        builder.setPositiveButton("Ano"){ dialog2, which ->
+        builder.setPositiveButton(resources.getString(R.string.yes)){ dialog2, which ->
             changeFood()
             super.onBackPressed()
         }
 
-        builder.setNeutralButton("Ne"){ dialog2, which ->
+        builder.setNeutralButton(resources.getString(R.string.no)){ dialog2, which ->
             super.onBackPressed()
         }
 
@@ -178,8 +180,8 @@ class FoodActivity : AppCompatActivity() {
         ingredientsListAdapter = IngredientsListAdapter(this, info)
         listView?.adapter = (ingredientsListAdapter)
         sumResult()
-        sumWeightSugarTextView?.setText("Celkem cukru: " + "%.2f".format(sumWeightSugar) + " g")
-        sumWeightFoodTextView?.setText("Váha jídla: " + "%.2f".format(sumWeightFood) + " g")
+        sumWeightSugarTextView?.setText(resources.getString(R.string.sum_sugar) + "%.2f".format(sumWeightSugar) + resources.getString(R.string.g_item))
+        sumWeightFoodTextView?.setText(resources.getString(R.string.weight_food) + "%.2f".format(sumWeightFood) + resources.getString(R.string.g_item))
 
 
         if (sumWeightFood == 0.0){
@@ -200,7 +202,9 @@ class FoodActivity : AppCompatActivity() {
         separator1?.visibility = sumVisibility
         separator2?.visibility = sumVisibility
         weightSugarPartFoodTextView?.visibility = weightSugarPartVisibility
-        weight_sugar_part_food.setText("Cukru v porci: " + "%.2f".format(food?.weightSugarInPartFood(weightPartFood)) + " g")
+        sugarInOneGramTextView?.visibility = weightSugarPartVisibility
+        weightSugarPartFoodTextView?.setText(resources.getString(R.string.sugar_in_part) + "%.2f".format(food?.weightSugarInPartFood(weightPartFood)) + resources.getString(R.string.g_item))
+        sugarInOneGramTextView?.setText(resources.getString(R.string.sugar_one_gramm_food) + "%.2f".format(food?.sugarInOneGramFood()) + resources.getString(R.string.g_item))
 
         if (nameFood.isEmpty()) {
             name_food_text_view.setTextColor(this.getResources().getColor(R.color.gray))
@@ -212,8 +216,8 @@ class FoodActivity : AppCompatActivity() {
     fun setWeightPartFood() {
         val builder = AlertDialog.Builder(this@FoodActivity)
         val weight = food?.sumWeightFood()
-        builder.setTitle("Porce jídla")
-        builder.setMessage("Zadejte množství porce:  (max. " + weight.toString() + " g)")
+        builder.setTitle(resources.getString(R.string.part_food))
+        builder.setMessage(resources.getString(R.string.set_part_food) + weight.toString() + resources.getString(R.string.g_item) + ")")
         val input = EditText(this@FoodActivity)
         input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         val lp = LinearLayout.LayoutParams(
@@ -227,22 +231,23 @@ class FoodActivity : AppCompatActivity() {
         input.requestFocus()
         builder.setView(input)
 
-        builder.setPositiveButton("ANO"){ dialog, which ->
+        builder.setPositiveButton(resources.getString(R.string.yes)){ dialog, which ->
             weightPartFood = input.text.toString().toDouble()
             if (weightPartFood != 0.0) {
                 if (weightPartFood > weight!!) {
-                    Toast.makeText(this@FoodActivity, "Porce je větší než uvařené jídlo.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@FoodActivity, resources.getString(R.string.warning_part_is_bigger), Toast.LENGTH_SHORT).show()
                 } else {
-                    btnPartFood?.setText("Porce: " + "%.2f".format(weightPartFood) + " g")
-                    weight_sugar_part_food.setText("Cukru v porci: " + "%.2f".format(food?.weightSugarInPartFood(weightPartFood)) + " g")
+                    btnPartFood?.setText(resources.getString(R.string.part_food_is) + "%.2f".format(weightPartFood) + " g")
+                    weightSugarPartFoodTextView?.setText(resources.getString(R.string.sugar_in_part) + "%.2f".format(food?.weightSugarInPartFood(weightPartFood)) + resources.getString(R.string.g_item))
+                    sugarInOneGramTextView?.setText(resources.getString(R.string.sugar_one_gramm_food) + "%.2f".format(food?.sugarInOneGramFood()) + resources.getString(R.string.g_item))
                     reloadActivity()
                 }
             } else {
-                Toast.makeText(this@FoodActivity, "Pole hodnota nesmí být nula.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@FoodActivity, resources.getString(R.string.warning_is_null), Toast.LENGTH_SHORT).show()
             }
         }
 
-        builder.setNeutralButton("Zrušit"){ _, _ ->
+        builder.setNeutralButton(resources.getString(R.string.cancel)){ _, _ ->
         }
         val dialog: AlertDialog = builder.create()
         dialog.show()
@@ -303,14 +308,14 @@ class FoodActivity : AppCompatActivity() {
     }
     private fun alertDialogChoiceActivity(ingredient: Ingredient) {
         val builder = AlertDialog.Builder(this@FoodActivity)
-        builder.setTitle("Výběr možnosti")
-        builder.setMessage("Co chcete s touto surovinou udělat?")
+        builder.setTitle(resources.getString(R.string.select_choice))
+        builder.setMessage(resources.getString(R.string.what_do_you_with_ingredient) + ingredient.name + resources.getString(R.string.do_with_food))
 
-        builder.setPositiveButton("Změnit množství"){ dialog, which ->
+        builder.setPositiveButton(resources.getString(R.string.to_change_value) ){ dialog, which ->
             changeWeightIngredient(ingredient)
         }
 
-        builder.setNeutralButton("Odstranit z jídla"){ dialog, which ->
+        builder.setNeutralButton(resources.getString(R.string.erase_from_food) ){ dialog, which ->
             deleteIngredientAlert(ingredient)
         }
         val dialog: AlertDialog = builder.create()
@@ -321,16 +326,16 @@ class FoodActivity : AppCompatActivity() {
 
     private fun deleteIngredientAlert(ingredient: Ingredient) {
         val builder2 = AlertDialog.Builder(this@FoodActivity)
-        builder2.setTitle("Odstranění suroviny z jídla")
-        builder2.setMessage("Opravdu chcete surovinu: " + ingredient.name + " vymazat?")
+        builder2.setTitle(resources.getString(R.string.erase_ingr_food))
+        builder2.setMessage(resources.getString(R.string.realy_erase_ingr_question) + ingredient.name + resources.getString(R.string.erase_question))
 
-        builder2.setPositiveButton("Ano"){ dialog2, which ->
+        builder2.setPositiveButton(resources.getString(R.string.yes)){ dialog2, which ->
             food?.deleteIngredient(ingredient)
             isChange = true
             reloadActivity()
         }
 
-        builder2.setNeutralButton("Ne"){ dialog2, which ->
+        builder2.setNeutralButton(resources.getString(R.string.no)){ dialog2, which ->
 
         }
 
@@ -341,8 +346,8 @@ class FoodActivity : AppCompatActivity() {
 
     private fun changeName(isFromAddIngredient: Boolean) {
         val builder = AlertDialog.Builder(this@FoodActivity)
-        builder.setTitle("Zadejte jméno jídla")
-        builder.setMessage("Uložit toto jméno?")
+        builder.setTitle(resources.getString(R.string.set_name_food))
+        builder.setMessage(resources.getString(R.string.set_this_name_question))
         val input = EditText(this@FoodActivity)
         val lp = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -353,9 +358,9 @@ class FoodActivity : AppCompatActivity() {
         input.requestFocus()
         builder.setView(input)
 
-        builder.setPositiveButton("ANO") { dialog, which ->
+        builder.setPositiveButton(resources.getString(R.string.yes)) { dialog, which ->
             if (input.text.toString().isNullOrEmpty()) {
-                Toast.makeText(this@FoodActivity, "Pole jméno nesmí být prázdné.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@FoodActivity, resources.getString(R.string.warning_is_empty), Toast.LENGTH_SHORT).show()
             } else {
                 nameFood = input.text.toString()
                 if (food == null) {
@@ -371,7 +376,7 @@ class FoodActivity : AppCompatActivity() {
             }
             reloadActivity()
         }
-        builder.setNeutralButton("Zrušit"){ _, _ ->
+        builder.setNeutralButton(resources.getString(R.string.cancel)){ _, _ ->
         }
 
         val dialog: AlertDialog = builder.create()
@@ -401,7 +406,7 @@ class FoodActivity : AppCompatActivity() {
             if (typeIngredient != null) {
                 addIngredientDialog(typeIngredient)
             } else {
-                Toast.makeText(this@FoodActivity, "Pole jméno nesmí být prázdné.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@FoodActivity, resources.getString(R.string.warning_is_null), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -410,8 +415,8 @@ class FoodActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this@FoodActivity)
         val nameTypeIngredient = ingredient.name
         var weight = ingredient.weight
-        builder.setTitle("Změnit množství suroviny")
-        builder.setMessage("Zadejte množství suroviny: " + nameTypeIngredient)
+        builder.setTitle(resources.getString(R.string.change_value_ingredient))
+        builder.setMessage(resources.getString(R.string.set_value_ingredient) + nameTypeIngredient)
         val input = EditText(this@FoodActivity)
         input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         val lp = LinearLayout.LayoutParams(
@@ -425,18 +430,18 @@ class FoodActivity : AppCompatActivity() {
         input.requestFocus()
         builder.setView(input)
 
-        builder.setPositiveButton("ANO"){ dialog, which ->
+        builder.setPositiveButton(resources.getString(R.string.yes)){ dialog, which ->
             weight = input.text.toString().toDouble()
             if (weight != 0.0) {
                 ingredient.changeWeight(weight)
                 isChange = true
                 reloadActivity()
             } else {
-                Toast.makeText(this@FoodActivity, "Pole hodnota nesmí být nula.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@FoodActivity, resources.getString(R.string.warning_is_null), Toast.LENGTH_SHORT).show()
             }
         }
 
-        builder.setNeutralButton("Zrušit"){ _, _ ->
+        builder.setNeutralButton(resources.getString(R.string.cancel)){ _, _ ->
         }
         val dialog: AlertDialog = builder.create()
         dialog.show()
@@ -447,8 +452,8 @@ class FoodActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this@FoodActivity)
         val nameTypeIngredient = typeIngredient.name
         var weight = 0.0
-        builder.setTitle("Množství suroviny")
-        builder.setMessage("Zadejte množství suroviny: " + nameTypeIngredient)
+        builder.setTitle(resources.getString(R.string.value_ingredient))
+        builder.setMessage(resources.getString(R.string.set_value_ingredient) + nameTypeIngredient)
         val input = EditText(this@FoodActivity)
         input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         val lp = LinearLayout.LayoutParams(
@@ -462,7 +467,7 @@ class FoodActivity : AppCompatActivity() {
         input.requestFocus()
         builder.setView(input)
 
-        builder.setPositiveButton("ANO"){ dialog, which ->
+        builder.setPositiveButton(resources.getString(R.string.yes)){ dialog, which ->
             weight = input.text.toString().toDouble()
             if (weight != 0.0) {
                 var ingredient = Ingredient(typeIngredient, weight)
@@ -470,11 +475,11 @@ class FoodActivity : AppCompatActivity() {
                 isChange = true
                 reloadActivity()
             } else {
-                Toast.makeText(this@FoodActivity, "Pole hodnota nesmí být nulová.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@FoodActivity, resources.getString(R.string.warning_is_null), Toast.LENGTH_SHORT).show()
             }
         }
 
-        builder.setNeutralButton("Zrušit"){ _, _ ->
+        builder.setNeutralButton(resources.getString(R.string.cancel)){ _, _ ->
         }
         val dialog: AlertDialog = builder.create()
         dialog.show()

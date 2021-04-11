@@ -41,10 +41,6 @@
 
             </LinearLayout>
 
-
-
-
-
             <LinearLayout
                 android:id="@+id/head_part_food_item"
                 android:layout_width="match_parent"
@@ -168,9 +164,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
+                    android:textColor="@color/red"
                     android:text="Weight sugar part food"
-                    android:layout_margin="16dp"
-                    android:textSize="30sp" />
+                    android:layout_marginEnd="16dp"
+                    android:textSize="25sp" />
+
+
+                <TextView
+                    android:id="@+id/sugar_in_one_gram"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right"
+                    android:textColor="@color/red"
+                    android:text="Weight sugar part food"
+                    android:layout_marginEnd="16dp"
+                    android:textSize="20sp" />
+
             </LinearLayout>
         </LinearLayout>
 

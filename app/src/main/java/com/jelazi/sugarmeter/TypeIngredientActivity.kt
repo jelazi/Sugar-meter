@@ -35,7 +35,7 @@ class TypeIngredientActivity : AppCompatActivity() {
         //actionbar
         val actionbar = supportActionBar
         //set actionbar title
-        actionbar!!.title = "Úprava suroviny"
+        actionbar!!.title = resources.getString(R.string.type_ingredient_activity_title)
         //set back button
         actionbar.setDisplayHomeAsUpEnabled(true)
         if (intent.extras?.get("typeIntent") != null) {
@@ -57,7 +57,7 @@ class TypeIngredientActivity : AppCompatActivity() {
 
         if (typeIngredient != null) {
             name_ingredient.text = (typeIngredient?.name)
-            value_ingredient.text = (typeIngredient?.valueSugar.toString() + " g/100g")
+            value_ingredient.text = (typeIngredient?.valueSugar.toString() + resources.getString(R.string.gram_to_houndred_gram))
         } else {
             typeIngredient = TypeIngredientsManager.getNewTypeIngredient("", 0.0)
         }
@@ -92,8 +92,8 @@ class TypeIngredientActivity : AppCompatActivity() {
 
     fun changeName() {
         val builder = AlertDialog.Builder(this@TypeIngredientActivity)
-        builder.setTitle("Změna jména")
-        builder.setMessage("Uložit toto jméno?")
+        builder.setTitle(resources.getString(R.string.set_name_ingredient))
+        builder.setMessage(resources.getString(R.string.set_this_name_question))
         val input = EditText(this@TypeIngredientActivity)
         val lp = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -101,7 +101,7 @@ class TypeIngredientActivity : AppCompatActivity() {
         )
         input.layoutParams = lp
         if (typeIngredient?.name =="") {
-            input.setText("Surovina")
+            input.setText(resources.getString(R.string.ingredient))
         } else {
             input.setText(typeIngredient?.name)
         }
@@ -109,7 +109,7 @@ class TypeIngredientActivity : AppCompatActivity() {
         input.requestFocus()
         builder.setView(input)
 
-        builder.setPositiveButton("ANO"){ dialog, which ->
+        builder.setPositiveButton(resources.getString(R.string.yes)){ dialog, which ->
             val newName = input.text.toString()
                 if (!TypeIngredientsManager.isSameName(newName)) {
                     typeIngredient?.name = newName
@@ -117,11 +117,11 @@ class TypeIngredientActivity : AppCompatActivity() {
                     isChangeName = true
                     reloadActivity()
                 } else {
-                    Toast.makeText(this@TypeIngredientActivity, "Jméno se již používá v jiné položce.", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@TypeIngredientActivity, resources.getString(R.string.name_is_same), Toast.LENGTH_SHORT).show()
                 }
         }
 
-        builder.setNeutralButton("Zrušit"){ _, _ ->
+        builder.setNeutralButton(resources.getString(R.string.cancel)){ _, _ ->
         }
         val dialog: AlertDialog = builder.create()
         dialog.show()
@@ -131,8 +131,8 @@ class TypeIngredientActivity : AppCompatActivity() {
 
     fun changeValue() {
         val builder = AlertDialog.Builder(this@TypeIngredientActivity)
-        builder.setTitle("Změna obsah cukru v 100 g")
-        builder.setMessage("Uložit tento obsah cukru?")
+        builder.setTitle(resources.getString(R.string.change_value_sugar))
+        builder.setMessage(resources.getString(R.string.set_value_sugar_question))
         val input = EditText(this@TypeIngredientActivity)
         input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         val lp = LinearLayout.LayoutParams(
@@ -142,22 +142,22 @@ class TypeIngredientActivity : AppCompatActivity() {
         input.layoutParams = lp
         var text:String = value_ingredient.text.toString()
 
-        text = text.replace(" g/100g", "")
+        text = text.replace(resources.getString(R.string.gram_to_houndred_gram), "")
         input.setText(text)
         input.setSelectAllOnFocus(true)
         input.requestFocus()
         builder.setView(input)
 
-        builder.setPositiveButton("ANO"){ dialog, which ->
+        builder.setPositiveButton(resources.getString(R.string.yes)){ dialog, which ->
             isChangeValue = true
             valueSugar = input.text.toString().toDouble()
             typeIngredient?.valueSugar = input.text.toString().toDouble()
-            value_ingredient.setText(input.text.toString() + " g/100g")
+            value_ingredient.setText(input.text.toString() + resources.getString(R.string.gram_to_houndred_gram))
             reloadActivity()
 
         }
 
-        builder.setNeutralButton("Zrušit"){ _, _ ->
+        builder.setNeutralButton(resources.getString(R.string.cancel)){ _, _ ->
         }
         val dialog: AlertDialog = builder.create()
         dialog.show()
@@ -166,12 +166,12 @@ class TypeIngredientActivity : AppCompatActivity() {
 
     fun saveIngredient () {
         if (typeIngredient?.name.isNullOrEmpty()) {
-            Toast.makeText(this@TypeIngredientActivity, "Pole jméno nesmí být prázdné.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@TypeIngredientActivity, resources.getString(R.string.field_name_empty), Toast.LENGTH_SHORT).show()
             return
         }
 
         if (typeIngredient?.valueSugar == null || typeIngredient?.valueSugar == 0.0) {
-            Toast.makeText(this@TypeIngredientActivity, "Pole hodnota cukru nesmí být prázdná.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@TypeIngredientActivity, resources.getString(R.string.field_value_empty), Toast.LENGTH_SHORT).show()
             return
         }
 

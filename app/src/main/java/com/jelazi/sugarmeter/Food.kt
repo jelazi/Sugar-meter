@@ -75,6 +75,12 @@ class Food (id: Int, name: String){
         return weightPartFood * ratio
     }
 
+    fun sugarInOneGramFood():Double {
+        var weightFood = sumWeightFood()
+        var weighSugar = sumWeightSugar()
+        return weighSugar / weightFood
+    }
+
     fun isCorrect():Boolean {
         if (name.isNullOrEmpty()) return false
         if (listIngredients.isEmpty()) return false
