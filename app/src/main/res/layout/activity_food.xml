@@ -16,14 +16,17 @@
 
 
         <LinearLayout
+            android:id="@+id/main_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/linearLayout"
+                android:id="@+id/name_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="8"
                 android:orientation="vertical">
 
                 <TextView
@@ -44,7 +47,8 @@
             <LinearLayout
                 android:id="@+id/head_part_food_item"
                 android:layout_width="match_parent"
-                android:layout_height="60sp"
+                android:layout_height="0dp"
+                android:layout_weight="8"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:weightSum="12">
@@ -95,29 +99,26 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:gravity="center"
-                    android:text="Cukr (g)"
+                    android:text="Sachar. (g)"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
-
-
             </LinearLayout>
-
-
-
 
 
             <ListView
                 android:id="@+id/listViewIngredient"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:longClickable="true"></ListView>
+                android:layout_height="0dp"
+                android:layout_weight="35"
+                android:longClickable="true">
 
-
+            </ListView>
 
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="45"
                 android:orientation="vertical">
 
 
@@ -134,7 +135,7 @@
                     android:text="Sum Food"
                     android:textAlignment="center"
                     android:textColor="@color/black"
-                    android:textSize="30sp" />
+                    android:textSize="25sp" />
 
                 <TextView
                     android:id="@+id/sum_suggar"
@@ -143,7 +144,7 @@
                     android:text="Sum Sugar"
                     android:textAlignment="center"
                     android:textColor="@color/red"
-                    android:textSize="30sp" />
+                    android:textSize="25sp" />
 
                 <View
                     android:id="@+id/separator1"

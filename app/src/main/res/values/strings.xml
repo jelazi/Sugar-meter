@@ -51,4 +51,8 @@
     <string name="field_value_empty">This field value is empty</string>
     <string name="ingredient_list_title_choice">Choice ingredients</string>
     <string name="ingredient_list_title_view">Ingredients view</string>
+    <string name="save">Save</string>
+    <string name="only_name">There is only name of food</string>
+    <string name="ok">Ok</string>
+    <string name="empty_values">There is empty values</string>
 </resources>

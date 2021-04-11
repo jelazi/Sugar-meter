@@ -127,7 +127,6 @@ class TypeIngredientActivity : AppCompatActivity() {
     fun changeName() {
         val builder = AlertDialog.Builder(this@TypeIngredientActivity)
         builder.setTitle(resources.getString(R.string.set_name_ingredient))
-        builder.setMessage(resources.getString(R.string.set_this_name_question))
         val input = EditText(this@TypeIngredientActivity)
         val lp = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -143,7 +142,7 @@ class TypeIngredientActivity : AppCompatActivity() {
         input.requestFocus()
         builder.setView(input)
 
-        builder.setPositiveButton(resources.getString(R.string.yes)){ dialog, which ->
+        builder.setPositiveButton(resources.getString(R.string.save)){ dialog, which ->
             val newName = input.text.toString()
                 if (!TypeIngredientsManager.isSameName(newName)) {
                     typeIngredient?.name = newName
@@ -167,7 +166,6 @@ class TypeIngredientActivity : AppCompatActivity() {
     fun changeValue() {
         val builder = AlertDialog.Builder(this@TypeIngredientActivity)
         builder.setTitle(resources.getString(R.string.change_value_sugar))
-        builder.setMessage(resources.getString(R.string.set_value_sugar_question))
         val input = EditText(this@TypeIngredientActivity)
         input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         val lp = LinearLayout.LayoutParams(
@@ -183,7 +181,7 @@ class TypeIngredientActivity : AppCompatActivity() {
         input.requestFocus()
         builder.setView(input)
 
-        builder.setPositiveButton(resources.getString(R.string.yes)){ dialog, which ->
+        builder.setPositiveButton(resources.getString(R.string.save)){ dialog, which ->
             isChangeValue = true
             valueSugar = input.text.toString().toDouble()
             typeIngredient?.valueSugar = input.text.toString().toDouble()

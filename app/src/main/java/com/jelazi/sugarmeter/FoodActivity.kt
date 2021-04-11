@@ -114,8 +114,23 @@ class FoodActivity : AppCompatActivity() {
             return
         }
         if (food?.isCorrect() != true) {
-            super.onBackPressed()
-            return
+            if (nameFood.isEmpty()) {
+                super.onBackPressed()
+                return
+            } else {
+                val builder = AlertDialog.Builder(this@FoodActivity)
+                builder.setMessage(resources.getString(R.string.only_name))
+
+                builder.setNeutralButton(resources.getString(R.string.ok)){ dialog2, which ->
+                    super.onBackPressed()
+                }
+
+                val dialog: AlertDialog = builder.create()
+                dialog.show()
+                dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+                return
+            }
+
         }
         val builder = AlertDialog.Builder(this@FoodActivity)
         builder.setTitle(resources.getString(R.string.save_food_title))
@@ -165,6 +180,32 @@ class FoodActivity : AppCompatActivity() {
     }
 
     fun changeFood() {
+        if (food?.isCorrect() != true) {
+            if (nameFood.isEmpty()) {
+                val builder = AlertDialog.Builder(this@FoodActivity)
+                builder.setMessage(resources.getString(R.string.empty_values))
+
+                builder.setNeutralButton(resources.getString(R.string.ok)){ dialog2, which ->
+                }
+
+                val dialog: AlertDialog = builder.create()
+                dialog.show()
+                dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+                return
+            } else {
+                val builder = AlertDialog.Builder(this@FoodActivity)
+                builder.setMessage(resources.getString(R.string.only_name))
+
+                builder.setNeutralButton(resources.getString(R.string.ok)){ dialog2, which ->
+                }
+
+                val dialog: AlertDialog = builder.create()
+                dialog.show()
+                dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+                return
+            }
+
+        }
         if (typeIntent == "edit") {
             FoodsManager.changeFood(food!!)
         } else {
@@ -347,7 +388,6 @@ class FoodActivity : AppCompatActivity() {
     private fun changeName(isFromAddIngredient: Boolean) {
         val builder = AlertDialog.Builder(this@FoodActivity)
         builder.setTitle(resources.getString(R.string.set_name_food))
-        builder.setMessage(resources.getString(R.string.set_this_name_question))
         val input = EditText(this@FoodActivity)
         val lp = LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
@@ -358,7 +398,7 @@ class FoodActivity : AppCompatActivity() {
         input.requestFocus()
         builder.setView(input)
 
-        builder.setPositiveButton(resources.getString(R.string.yes)) { dialog, which ->
+        builder.setPositiveButton(resources.getString(R.string.save)) { dialog, which ->
             if (input.text.toString().isNullOrEmpty()) {
                 Toast(this).showCustomToast (resources.getString(R.string.warning_is_empty),this)
             } else {

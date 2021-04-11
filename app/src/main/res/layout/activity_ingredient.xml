@@ -14,12 +14,31 @@
             android:orientation="vertical">
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:text="Surovina:" />
+
+            <TextView
                 android:id="@+id/name_ingredient"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
-                android:textSize="40sp"
-                android:text="Jméno suroviny" />
+                android:textSize="35sp"
+                android:text="Zadejte název" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="20sp"
+                android:text="Množství sacharidů ve 100 g:" />
 
             <TextView
                 android:id="@+id/value_ingredient"
@@ -29,6 +48,10 @@
                 android:textAlignment="center"
                 android:textSize="40sp"
                 android:text="0.0 g/100g" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/black" />
 
 
 
