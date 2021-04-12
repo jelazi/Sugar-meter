@@ -20,7 +20,7 @@
     <string name="save_food_question_part_two">" uložit?"</string>
     <string name="sum_sugar">"Celkem sacharidů: "</string>
     <string name="g_item">" g"</string>
-    <string name="weight_food">"Váha jídla: "</string>
+    <string name="weight_food">"Váha surovin se sach.: "</string>
     <string name="sugar_in_part">"Sacharidů v porci: "</string>
     <string name="sugar_one_gramm_food">"Sacharidů v 1 g jídla: "</string>
     <string name="part_food">Porce jídla</string>
@@ -48,7 +48,7 @@
     <string name="name_is_same">Jméno se již používá v jiné položce.</string>
     <string name="change_value_sugar">Obsah sacharidů ve 100 g</string>
     <string name="set_value_sugar_question">Uložit tento obsah sacharidů?</string>
-    <string name="field_name_empty">Pole jméno nesmí být prázdné.</string>
+    <string name="field_name_empty">Pole název nesmí být prázdné.</string>
     <string name="field_value_empty">Pole hodnota sacharidů nesmí být prázdná.</string>
     <string name="ingredient_list_title_choice">Výběr surovin</string>
     <string name="ingredient_list_title_view">Prohlížení surovin</string>
@@ -59,4 +59,5 @@
     <string name="title_real_weight">Skutečná váha jídla</string>
     <string name="message_real_weight">Zadejte váhu jídlo po uvaření</string>
     <string name="warning_weight_no_correct">Skutečná váha jídla je menší než váha všech surovin.</string>
+    <string name="real_weight_food_label">Váha hotového jídla</string>
 </resources>

@@ -6,6 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".TypeIngredientActivity">
 
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+
 
 
         <LinearLayout
@@ -54,15 +59,25 @@
                 android:background="@color/black" />
 
 
-
-
             <Button
                 android:id="@+id/btn_save_ingredient"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Ulož surovinu" />
 
+
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_web_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="16dp"
+            android:text="Navštiv stránky kalorické tabulky" />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

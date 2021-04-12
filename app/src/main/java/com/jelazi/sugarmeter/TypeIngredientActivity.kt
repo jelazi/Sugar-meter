@@ -108,6 +108,9 @@ class TypeIngredientActivity : AppCompatActivity() {
         btn_save_ingredient.setOnClickListener {
             saveIngredient()
         }
+        btn_web_view.setOnClickListener {
+            openWebViewIntent()
+        }
     }
 
 
@@ -195,6 +198,14 @@ class TypeIngredientActivity : AppCompatActivity() {
         val dialog: AlertDialog = builder.create()
         dialog.show()
         dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+    }
+
+    fun openWebViewIntent() {
+        val intent = Intent(this, WebActivity::class.java)
+        var webPage = "https://www.kaloricketabulky.cz/tabulka-potravin"
+
+        intent.putExtra("webPage", webPage)
+        startActivity(intent)
     }
 
     fun saveIngredient () {

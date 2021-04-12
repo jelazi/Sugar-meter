@@ -38,7 +38,6 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         app:layout_anchor="@id/linearLayout"
-        app:backgroundTint="@color/purple_500"
         app:layout_anchorGravity="bottom|left"
         android:layout_margin="16dp"
         app:srcCompat="@android:drawable/ic_input_add" />

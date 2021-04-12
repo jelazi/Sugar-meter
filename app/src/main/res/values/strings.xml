@@ -58,4 +58,5 @@
     <string name="title_real_weight">Real weight</string>
     <string name="message_real_weight">Set real weight of food</string>
     <string name="warning_weight_no_correct">Real food is less than sum ingredients</string>
+    <string name="real_weight_food_label">Real weight food</string>
 </resources>

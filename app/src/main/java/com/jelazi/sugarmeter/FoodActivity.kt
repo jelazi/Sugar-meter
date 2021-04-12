@@ -245,10 +245,10 @@ class FoodActivity : AppCompatActivity() {
         }
         if (realWeightFood == 0.0) {
             btnPartFoodVisibility = View.INVISIBLE
-            btnRealWeightFood?.setText("Celková váha")
+            btnRealWeightFood?.setText(resources.getString(R.string.real_weight_food_label))
         } else {
             btnPartFoodVisibility = View.VISIBLE
-            btnRealWeightFood?.setText("Celková váha: " + realWeightFood.toString() + " g")
+            btnRealWeightFood?.setText(resources.getString(R.string.real_weight_food_label) + ": " + realWeightFood.toString() + resources.getString(R.string.g_item))
         }
 
         if (weightPartFood == 0.0) {
@@ -308,6 +308,7 @@ class FoodActivity : AppCompatActivity() {
                     } else {
                         realWeightFood = weight
                         food?.realWeight = realWeightFood
+                        isChange = true
                         reloadActivity()
                     }
                 }
@@ -383,7 +384,7 @@ class FoodActivity : AppCompatActivity() {
                 if (weightPartFood > realWeightFood!!) {
                     Toast(this).showCustomToast (resources.getString(R.string.warning_part_is_bigger),this)
                 } else {
-                    btnPartFood?.setText(resources.getString(R.string.part_food_is) + "%.2f".format(weightPartFood) + " g")
+                    btnPartFood?.setText(resources.getString(R.string.part_food_is) + "%.2f".format(weightPartFood) + resources.getString(R.string.g_item))
                     weightSugarPartFoodTextView?.setText(resources.getString(R.string.sugar_in_part) + "%.2f".format(food?.weightSugarInPartFood(weightPartFood)) + resources.getString(R.string.g_item))
                     sugarInOneGramTextView?.setText(resources.getString(R.string.sugar_one_gramm_food) + "%.2f".format(food?.sugarInOneGramFood()) + resources.getString(R.string.g_item))
                     reloadActivity()
