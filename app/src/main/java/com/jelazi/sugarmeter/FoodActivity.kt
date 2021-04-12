@@ -4,8 +4,6 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
-import android.text.SpannableString
-import android.text.style.ForegroundColorSpan
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -21,12 +19,14 @@ import kotlin.properties.Delegates
 class FoodActivity : AppCompatActivity() {
     var food : Food? = null
     var nameFood : String = ""
-    var sumWeightFood: Double = 0.0
+    var sumWeightSugarIngredients: Double = 0.0
     var sumWeightSugar: Double = 0.0
+    var realWeightFood: Double = 0.0
     var weightPartFood: Double = 0.0
 
     var sumWeightFoodTextView: TextView? = null
     var sumWeightSugarTextView: TextView? = null
+    var btnRealWeightFood: Button? = null
     var btnPartFood: Button? = null
     var weightSugarPartFoodTextView: TextView? = null
     var sugarInOneGramTextView: TextView? = null
@@ -39,8 +39,15 @@ class FoodActivity : AppCompatActivity() {
     var addIngredientFloatBtn: FloatingActionButton? = null
     var textViewName: TextView? = null
     var ingredientsListAdapter: IngredientsListAdapter? = null
+
+
+
     var sumVisibility = View.INVISIBLE
+    var btnPartFoodVisibility = View.INVISIBLE
     var weightSugarPartVisibility = View.INVISIBLE
+
+
+
     private val CHOICE_INGREDIENT = 1
     var typeIntent = ""
     var isChange :Boolean by Delegates.observable(false) { prop, old, new ->
@@ -62,6 +69,9 @@ class FoodActivity : AppCompatActivity() {
                     if (f != null) {
                         food = f
                         nameFood = food?.name.toString()
+                        if (food?.realWeight != null) {
+                            realWeightFood = food?.realWeight!!
+                        }
                     }
                 }
             }
@@ -81,6 +91,7 @@ class FoodActivity : AppCompatActivity() {
         addIngredientFloatBtn = findViewById(R.id.floatingActionButtonAddIngredient)
         sugarInOneGramTextView = findViewById(R.id.sugar_in_one_gram)
         btnPartFood = findViewById(R.id.btn_part_food)
+        btnRealWeightFood = findViewById(R.id.btn_real_weight_food)
 
         weightSugarPartFoodTextView = findViewById(R.id.weight_sugar_part_food)
         separator1 = findViewById(R.id.separator1)
@@ -172,6 +183,91 @@ class FoodActivity : AppCompatActivity() {
         }
     }
 
+    private fun initListeners() {
+        textViewName?.setOnClickListener {
+            changeName(false)
+        }
+        addIngredientFloatBtn?.setOnClickListener {
+            addIngredient()
+        }
+        btnPartFood?.setOnClickListener {
+            setWeightPartFood()
+        }
+
+        btnRealWeightFood?.setOnClickListener {
+            setRealWeight()
+        }
+
+        listView?.setOnItemLongClickListener(object : AdapterView.OnItemLongClickListener {
+            override fun onItemLongClick(adapterView: AdapterView<*>, view: View, i: Int, l: Long): Boolean {
+                val ingredient = food?.getIngredientByName(info[i].get("name").toString())
+                if (ingredient != null)
+                    alertDialogChoiceActivity(ingredient)
+                return true
+            }
+        })
+
+    }
+
+    private fun reloadActivity() {
+        createHashMap()
+        ingredientsListAdapter = IngredientsListAdapter(this, info)
+        listView?.adapter = (ingredientsListAdapter)
+        sumResult()
+        sumWeightSugarTextView?.setText(resources.getString(R.string.sum_sugar) + "%.2f".format(sumWeightSugar) + resources.getString(R.string.g_item))
+        sumWeightFoodTextView?.setText(resources.getString(R.string.weight_food) + "%.2f".format(sumWeightSugarIngredients) + resources.getString(R.string.g_item))
+
+        if (food?.isCorrect() == true) {
+            if (realWeightFood < food?.sumWeightIngredients()!!) {
+                realWeightFood = 0.0
+                food?.realWeight = realWeightFood
+            }
+        }
+
+        visibility()
+
+
+        weightSugarPartFoodTextView?.setText(resources.getString(R.string.sugar_in_part) + "%.2f".format(food?.weightSugarInPartFood(weightPartFood)) + resources.getString(R.string.g_item))
+        sugarInOneGramTextView?.setText(resources.getString(R.string.sugar_one_gramm_food) + "%.2f".format(food?.sugarInOneGramFood()) + resources.getString(R.string.g_item))
+
+        if (nameFood.isEmpty()) {
+            name_food_text_view.setTextColor(this.getResources().getColor(R.color.gray))
+        } else {
+            name_food_text_view.setTextColor(this.getResources().getColor(R.color.black))
+        }
+    }
+
+    private fun visibility() {
+        if (sumWeightSugarIngredients == 0.0) {
+            sumVisibility = View.INVISIBLE
+        } else{
+            sumVisibility = View.VISIBLE
+        }
+        if (realWeightFood == 0.0) {
+            btnPartFoodVisibility = View.INVISIBLE
+            btnRealWeightFood?.setText("Celková váha")
+        } else {
+            btnPartFoodVisibility = View.VISIBLE
+            btnRealWeightFood?.setText("Celková váha: " + realWeightFood.toString() + " g")
+        }
+
+        if (weightPartFood == 0.0) {
+            weightSugarPartVisibility = View.INVISIBLE
+            btnPartFood?.setText("Porce")
+        } else {
+            weightSugarPartVisibility = View.VISIBLE
+        }
+        headFoodLayout?.visibility = sumVisibility
+        sumWeightSugarTextView?.visibility = sumVisibility
+        sumWeightFoodTextView?.visibility = sumVisibility
+        btnPartFood?.visibility = btnPartFoodVisibility
+        btnRealWeightFood?.visibility= sumVisibility
+        separator1?.visibility = sumVisibility
+        separator2?.visibility = sumVisibility
+        weightSugarPartFoodTextView?.visibility = weightSugarPartVisibility
+        sugarInOneGramTextView?.visibility = weightSugarPartVisibility
+    }
+
 
 
     private fun isChangeValue() {
@@ -179,7 +275,56 @@ class FoodActivity : AppCompatActivity() {
         reloadActivity()
     }
 
-    fun changeFood() {
+
+    private fun setRealWeight() {
+        val builder = AlertDialog.Builder(this@FoodActivity)
+        val weightIngredients = food?.sumWeightIngredients()
+        builder.setTitle(resources.getString(R.string.title_real_weight))
+        builder.setMessage(resources.getString(R.string.message_real_weight))
+        val input = EditText(this@FoodActivity)
+        input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        val lp = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT
+        )
+        input.layoutParams = lp
+        if (realWeightFood != 0.0) {
+            input.setText(realWeightFood.toString())
+        } else {
+            input.setText(weightIngredients.toString())
+        }
+        input.setSelectAllOnFocus(true)
+        input.requestFocus()
+        builder.setView(input)
+
+        builder.setPositiveButton(resources.getString(R.string.ok)){ dialog, which ->
+            var weight = input.text.toString().toDouble()
+            if (weight != 0.0) {
+                if (weightIngredients != null) {
+                    if (weightIngredients > weight) {
+                        Toast(this).showCustomToast (resources.getString(R.string.warning_weight_no_correct),this)
+                        realWeightFood = 0.0
+                        food?.realWeight = realWeightFood
+                    } else {
+                        realWeightFood = weight
+                        food?.realWeight = realWeightFood
+                        reloadActivity()
+                    }
+                }
+            } else {
+                Toast(this).showCustomToast (resources.getString(R.string.warning_is_null),this)
+            }
+        }
+
+        builder.setNeutralButton(resources.getString(R.string.cancel)){ _, _ ->
+        }
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
+        dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+    }
+
+
+    private fun changeFood() {
         if (food?.isCorrect() != true) {
             if (nameFood.isEmpty()) {
                 val builder = AlertDialog.Builder(this@FoodActivity)
@@ -215,50 +360,10 @@ class FoodActivity : AppCompatActivity() {
         isChange = false
     }
 
-
-    fun reloadActivity() {
-        createHashMap()
-        ingredientsListAdapter = IngredientsListAdapter(this, info)
-        listView?.adapter = (ingredientsListAdapter)
-        sumResult()
-        sumWeightSugarTextView?.setText(resources.getString(R.string.sum_sugar) + "%.2f".format(sumWeightSugar) + resources.getString(R.string.g_item))
-        sumWeightFoodTextView?.setText(resources.getString(R.string.weight_food) + "%.2f".format(sumWeightFood) + resources.getString(R.string.g_item))
-
-
-        if (sumWeightFood == 0.0){
-            sumVisibility = View.INVISIBLE
-        } else{
-            sumVisibility = View.VISIBLE
-        }
-        if (weightPartFood == 0.0) {
-            weightSugarPartVisibility = View.INVISIBLE
-            btnPartFood?.setText("Porce")
-        } else {
-            weightSugarPartVisibility = View.VISIBLE
-        }
-        headFoodLayout?.visibility = sumVisibility
-        sumWeightSugarTextView?.visibility = sumVisibility
-        sumWeightFoodTextView?.visibility = sumVisibility
-        btnPartFood?.visibility = sumVisibility
-        separator1?.visibility = sumVisibility
-        separator2?.visibility = sumVisibility
-        weightSugarPartFoodTextView?.visibility = weightSugarPartVisibility
-        sugarInOneGramTextView?.visibility = weightSugarPartVisibility
-        weightSugarPartFoodTextView?.setText(resources.getString(R.string.sugar_in_part) + "%.2f".format(food?.weightSugarInPartFood(weightPartFood)) + resources.getString(R.string.g_item))
-        sugarInOneGramTextView?.setText(resources.getString(R.string.sugar_one_gramm_food) + "%.2f".format(food?.sugarInOneGramFood()) + resources.getString(R.string.g_item))
-
-        if (nameFood.isEmpty()) {
-            name_food_text_view.setTextColor(this.getResources().getColor(R.color.gray))
-        } else {
-            name_food_text_view.setTextColor(this.getResources().getColor(R.color.black))
-        }
-    }
-
-    fun setWeightPartFood() {
+    private fun setWeightPartFood() {
         val builder = AlertDialog.Builder(this@FoodActivity)
-        val weight = food?.sumWeightFood()
         builder.setTitle(resources.getString(R.string.part_food))
-        builder.setMessage(resources.getString(R.string.set_part_food) + weight.toString() + resources.getString(R.string.g_item) + ")")
+        builder.setMessage(resources.getString(R.string.set_part_food) + realWeightFood.toString() + resources.getString(R.string.g_item) + ")")
         val input = EditText(this@FoodActivity)
         input.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         val lp = LinearLayout.LayoutParams(
@@ -275,7 +380,7 @@ class FoodActivity : AppCompatActivity() {
         builder.setPositiveButton(resources.getString(R.string.yes)){ dialog, which ->
             weightPartFood = input.text.toString().toDouble()
             if (weightPartFood != 0.0) {
-                if (weightPartFood > weight!!) {
+                if (weightPartFood > realWeightFood!!) {
                     Toast(this).showCustomToast (resources.getString(R.string.warning_part_is_bigger),this)
                 } else {
                     btnPartFood?.setText(resources.getString(R.string.part_food_is) + "%.2f".format(weightPartFood) + " g")
@@ -296,11 +401,11 @@ class FoodActivity : AppCompatActivity() {
 
     }
 
-    fun sumResult () {
-        sumWeightFood = 0.0
+    private fun sumResult () {
+        sumWeightSugarIngredients = 0.0
         sumWeightSugar = 0.0
         if (food != null && !food?.listIngredients?.isEmpty()!!) {
-            sumWeightFood = food?.sumWeightFood()!!
+            sumWeightSugarIngredients = food?.sumWeightIngredients()!!
             sumWeightSugar = food?.sumWeightSugar()!!
         }
     }
@@ -326,27 +431,7 @@ class FoodActivity : AppCompatActivity() {
 
 
 
-    private fun initListeners() {
-        textViewName?.setOnClickListener {
-            changeName(false)
-        }
-        addIngredientFloatBtn?.setOnClickListener {
-            addIngredient()
-        }
-        btnPartFood?.setOnClickListener {
-            setWeightPartFood()
-        }
 
-        listView?.setOnItemLongClickListener(object : AdapterView.OnItemLongClickListener {
-            override fun onItemLongClick(adapterView: AdapterView<*>, view: View, i: Int, l: Long): Boolean {
-                val ingredient = food?.getIngredientByName(info[i].get("name").toString())
-                if (ingredient != null)
-                    alertDialogChoiceActivity(ingredient)
-                return true
-            }
-        })
-
-    }
     private fun alertDialogChoiceActivity(ingredient: Ingredient) {
         val builder = AlertDialog.Builder(this@FoodActivity)
         builder.setTitle(resources.getString(R.string.select_choice))
@@ -451,7 +536,7 @@ class FoodActivity : AppCompatActivity() {
         }
     }
 
-    fun changeWeightIngredient(ingredient: Ingredient) {
+    private fun changeWeightIngredient(ingredient: Ingredient) {
         val builder = AlertDialog.Builder(this@FoodActivity)
         val nameTypeIngredient = ingredient.name
         var weight = ingredient.weight
@@ -488,7 +573,7 @@ class FoodActivity : AppCompatActivity() {
         dialog.window!!.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
     }
 
-    fun addIngredientDialog(typeIngredient: TypeIngredient) {
+    private fun addIngredientDialog(typeIngredient: TypeIngredient) {
         val builder = AlertDialog.Builder(this@FoodActivity)
         val nameTypeIngredient = typeIngredient.name
         var weight = 0.0

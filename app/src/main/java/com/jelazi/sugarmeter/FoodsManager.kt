@@ -49,6 +49,7 @@ object FoodsManager {
         var oldFood = newFood.id?.let { getFoodById(it) }
         if (oldFood?.name != newFood.name) oldFood?.name = newFood.name
         if (oldFood?.listIngredients != newFood.listIngredients) oldFood?.listIngredients = newFood.listIngredients
+        if (oldFood?.realWeight != newFood.realWeight) oldFood?.realWeight = newFood.realWeight
         return true
     }
 

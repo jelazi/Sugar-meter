@@ -56,4 +56,7 @@
     <string name="only_name">V jídle máte pouze uložený název, jídlo nebude uloženo.</string>
     <string name="ok">Ok</string>
     <string name="empty_values">V jídle nemáte nic vyplněné, jídlo nebude uloženo.</string>
+    <string name="title_real_weight">Skutečná váha jídla</string>
+    <string name="message_real_weight">Zadejte váhu jídlo po uvaření</string>
+    <string name="warning_weight_no_correct">Skutečná váha jídla je menší než váha všech surovin.</string>
 </resources>

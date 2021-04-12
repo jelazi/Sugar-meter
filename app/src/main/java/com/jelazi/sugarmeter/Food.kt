@@ -1,12 +1,10 @@
 package com.jelazi.sugarmeter
 
-import android.widget.Button
-import android.widget.ListView
-
 class Food (id: Int, name: String){
     var name: String? = null
     var listIngredients = arrayListOf<Ingredient>()
     var id: Int? = null
+    var realWeight: Double? = null
 
     init {
         this.name = name
@@ -49,7 +47,7 @@ class Food (id: Int, name: String){
         return false
     }
 
-    fun sumWeightFood(): Double {
+    fun sumWeightIngredients(): Double {
         if (listIngredients.isEmpty()) return 0.0
         var result = 0.0
         for (ingredient in listIngredients) {
@@ -68,17 +66,16 @@ class Food (id: Int, name: String){
     }
 
     fun weightSugarInPartFood(weightPartFood: Double):Double  {
-        if (weightPartFood == 0.0 || listIngredients.isEmpty()) return 0.0
-        var weightFood = sumWeightFood()
+        if (weightPartFood == 0.0 || listIngredients.isEmpty() || realWeight == null || realWeight == 0.0) return 0.0
         var weighSugar = sumWeightSugar()
-        var ratio = weighSugar / weightFood
+        var ratio = weighSugar / realWeight!!
         return weightPartFood * ratio
     }
 
     fun sugarInOneGramFood():Double {
-        var weightFood = sumWeightFood()
+        if (realWeight == null || realWeight == 0.0) return 0.0
         var weighSugar = sumWeightSugar()
-        return weighSugar / weightFood
+        return weighSugar / realWeight!!
     }
 
     fun isCorrect():Boolean {
