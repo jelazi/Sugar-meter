@@ -13,17 +13,30 @@
         android:theme="@style/Theme.SugarMeter"
         android:usesCleartextTraffic="true">
 
-        <activity android:name=".WebActivity"></activity>
-        <activity android:name=".TypeIngredientActivity" />
-        <activity android:name=".FoodActivity" />
-        <activity android:name=".TypeIngredientsListActivity" />
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".WebActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait" />
+        <activity android:name=".TypeIngredientActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".FoodActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+
+        <activity android:name=".TypeIngredientsListActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MainActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>

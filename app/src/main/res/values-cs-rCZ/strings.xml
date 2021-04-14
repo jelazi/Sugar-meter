@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Měřič sacharidů</string>
+    <string name="app_name">Šárinčin sacharidátor</string>
     <string name="main_activity_title">Výběr jídel</string>
     <string name="create_first_food">Vytvořte své první jídlo.</string>
     <string name="select_choice">Výběr možnosti</string>
