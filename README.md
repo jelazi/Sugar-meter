@@ -3,7 +3,7 @@ SugarMeter
 
 **Sugar meter** is application for calculating the value of carbohydrates in food.
 
-![description](untitled.gif | width=250)
+![description](untitled.gif)
 
 
 ## Application description 
