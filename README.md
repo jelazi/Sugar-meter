@@ -3,7 +3,7 @@ SugarMeter
 
 **Sugar meter** is application for calculating the value of carbohydrates in food.
 
-![Description](https://bitbucket.org/jelazi/sugarmeter/src/develop/untitled.gif)
+<img src="untitled.gif" width="250">
 
 ## Application description 
 
@@ -11,10 +11,11 @@ Each meal in the application consists of ingredients into which it is possible t
 
 ## Assimilated libraries
 
-[AvatarImageGenerator](https://github.com/AmosKorir/AvatarImageGenerator)
+[Avatar Image Generator](https://github.com/AmosKorir/AvatarImageGenerator)
 
 [Custom Toast](https://www.geeksforgeeks.org/how-to-add-a-custom-styled-toast-in-android-using-kotlin/)
 
 
 
 
+<img src="untitled.gif" width="48">
