@@ -3,7 +3,7 @@ SugarMeter
 
 **Sugar meter** is application for calculating the value of carbohydrates in food.
 
-![alt text for the image](untitled.gif){width=250}
+![description](untitled.gif = 250x)
 
 
 ## Application description 
@@ -17,6 +17,3 @@ Each meal in the application consists of ingredients into which it is possible t
 [Custom Toast](https://www.geeksforgeeks.org/how-to-add-a-custom-styled-toast-in-android-using-kotlin/)
 
 
-
-
-<img src="untitled.gif" width="48">
