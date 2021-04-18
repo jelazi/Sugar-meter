@@ -4,16 +4,14 @@ import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import com.avatarfirst.avatargenlib.AvatarConstants
 import com.avatarfirst.avatargenlib.AvatarGenerator
-import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class FoodsListAdapter (context: Context, arrayList: ArrayList<HashMap<String, String>>) : CustomLIstAdapter(context, arrayList)  {
+class FoodsListAdapter (context: Context, arrayList: ArrayList<HashMap<String, String>>) : CustomListAdapter(context, arrayList)  {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
 

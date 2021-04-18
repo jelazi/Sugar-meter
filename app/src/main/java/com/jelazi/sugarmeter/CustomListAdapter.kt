@@ -14,7 +14,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
-open class CustomLIstAdapter (context: Context, arrayList: ArrayList<HashMap<String, String>>) : BaseAdapter()  {
+open class CustomListAdapter (context: Context, arrayList: ArrayList<HashMap<String, String>>) : BaseAdapter()  {
     var arrayList = arrayList
     var context = context
     var tempNameVersionList = ArrayList(arrayList)

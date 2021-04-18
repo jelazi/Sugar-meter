@@ -53,28 +53,6 @@ object TypeIngredientsManager {
         return false
     }
 
-    fun changeNameTypeIngredient(id: Int, newName: String) : Boolean{
-        if (listTypeIngredients.isEmpty()) return false
-        for (typeIngredient in listTypeIngredients) {
-            if (typeIngredient.id == id) {
-                typeIngredient.name = newName
-                return true
-            }
-        }
-        return false
-
-    }
-
-    fun changeValueTypeIngredient(id: Int, newValue: Double) : Boolean {
-        if (listTypeIngredients.isEmpty()) return false
-        for (ingredient in listTypeIngredients) {
-            if (ingredient.id == id) {
-                ingredient.valueSugar = newValue
-                return true
-            }
-        }
-        return false
-    }
 
     fun deleteIngredient(id: Int) : Boolean {
         if (listTypeIngredients.isEmpty()) return false
